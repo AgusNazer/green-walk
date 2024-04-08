@@ -1,0 +1,16 @@
+.fullScreenBackground {
+    height: 100vh; /* Altura completa de la pantalla */
+    width: 100vw; /* Ancho completo de la pantalla */
+    background-image: url('/images/background.webp');
+    background-size: cover; /* Asegura que la imagen cubra el contenedor */
+    background-position: center; /* Centra la imagen de fondo */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+.title{
+  font-size: 36px;
+  color: rgb(26, 25, 25);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;;
+}
