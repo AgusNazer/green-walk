@@ -22,10 +22,33 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tokens: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  activities: [{
+    date: Date,
+    duration: Number,
+    distance: Number,
+    tokensEarned: Number,
+  }],
+  transactions: [{
+    type: { type: String, enum: ['earn', 'spend'] },
+    amount: Number,
+    description: String,
+    date: { type: Date, default: Date.now },
+  }],
+  preferences: {
+    interestedIn: [String],
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 }, { timestamps: true });
+
 
 const User = mongoose.model('User', userSchema);
 
 // export default User;
 
-module.exports = userSchema;
+module.exports = User;
