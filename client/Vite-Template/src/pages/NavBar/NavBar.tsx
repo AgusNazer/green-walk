@@ -3,32 +3,32 @@ import React from 'react'
 const NavBar = () => {
   return (
     <nav
-  className="block w-full  px-6 py-3 mx-auto text-white bg-black/70 border shadow-md rounded-xl border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200">
+  className="fixed z-10 w-full  px-6 py-3 mx-auto text-white ">
   <div className="flex items-center justify-between text-blue-gray-900">
     <a href="/a"
-      className="mr-4 block cursor-pointer py-1.5 font-sans text-base font-semibold leading-relaxed tracking-normal text-inherit antialiased">
-      Material Tailwind
+      className="mr-4 block cursor-pointer py-1.5 font-sans text-2xl font-semibold leading-relaxed tracking-normal text-inherit antialiased">
+      Green Runner
     </a>
     <div className="hidden lg:block">
       <ul className="flex flex-col gap-2 my-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-        <li className="block p-1 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
           <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
-            Pages
+            About Us
           </a>
         </li>
-        <li className="block p-1 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
+          <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
+            Blockchain
+          </a>
+        </li>
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
+          <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
+            Reward
+          </a>
+        </li>
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
           <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
             Account
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">
-          <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
-            Blocks
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">
-          <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
-            Docs
           </a>
         </li>
       </ul>
