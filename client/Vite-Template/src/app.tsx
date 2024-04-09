@@ -8,6 +8,7 @@ import { Home } from "./pages/home";
 import { Mint } from "./fungibleToken/Mint";
 import LoginPage from "./pages/LoginPage";
 import { Routes, Route  } from 'react-router-dom'
+import NavBar from "./pages/NavBar/NavBar";
 
 function Component() {
   const { isApiReady } = useApi();
@@ -25,6 +26,7 @@ function Component() {
   return (
     <div>
           <Header isAccountVisible={isAccountReady}/>
+          <NavBar/>
           <Routes>
               <Route path="/" element={<LoginPage />} />
               <Route path="/mint" element={<Mint />} />
