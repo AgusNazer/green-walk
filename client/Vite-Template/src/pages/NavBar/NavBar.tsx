@@ -3,7 +3,7 @@ import React from 'react'
 const NavBar = () => {
   return (
     <nav
-  className="block w-full max-w-screen-xl px-6 py-3 mx-auto text-white bg-black border shadow-md rounded-xl border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200">
+  className="block w-full  px-6 py-3 mx-auto text-white bg-black/70 border shadow-md rounded-xl border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200">
   <div className="flex items-center justify-between text-blue-gray-900">
     <a href="/a"
       className="mr-4 block cursor-pointer py-1.5 font-sans text-base font-semibold leading-relaxed tracking-normal text-inherit antialiased">
