@@ -1,34 +1,33 @@
-// import express from 'express';
-// import User from '../models/User'; 
 const express = require('express');
-const User = require('../models/User');
-
-
 const router = express.Router();
+const userController = require('../controllers/userController'); 
 
-router.post('/register', async (req, res) => {
-  try {
-    const newUser = new User(req.body);
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
-  } catch (error) {
-    if (error.name === 'ValidationError') {
-      let errors = {};
+// registro de usuario
+router.post('/register', userController.register);
 
-      Object.keys(error.errors).forEach((key) => {
-        errors[key] = error.errors[key].message;
-      });
+// inicio de sesion ( JWT )
+// router.post('/login', userController.login);
 
-      return res.status(400).json(errors);
-    }
-    return res.status(500).json({ error: 'Algo salió mal al registrar el usuario' });
-  }
-});
-router.get('/test', (req, res) => {
-    res.send('Test endpoint response');
-  });
+// // update user
+// router.put('/profile/update', userController.updateProfile);
+
+// // change password
+// router.put('/change-password', userController.changePassword);
+
+// // recovery password
+// router.post('/forgot-password', userController.forgotPassword);
+
+// // reset password
+// router.post('/reset-password', userController.resetPassword);
+
+// // info profile
+// router.get('/profile', userController.getProfile);
+
+// // delete user
+// router.delete('/delete-account', userController.deleteAccount);
+
+//
 
 
-// export default router;
 
 module.exports = router;
