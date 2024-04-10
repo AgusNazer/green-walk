@@ -1,6 +1,7 @@
 import React from 'react'
 
 const NavBar = () => {
+  
   return (
     <nav
   className="fixed z-10 w-full  px-6 py-3 mx-auto text-white ">
@@ -13,9 +14,9 @@ const NavBar = () => {
     <div className="hidden lg:block">
       <ul className="flex flex-col gap-2 my-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
         <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
-          <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
+          <button className="flex items-center transition-colors hover:text-blue-500">
             About Us
-          </a>
+          </button>
         </li>
         <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
           <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
