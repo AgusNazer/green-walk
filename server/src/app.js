@@ -7,6 +7,10 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes.js');
 const userActivity = require('./routes/userActivity.js')
+// test de firebase jwt
+// require('./services/firebaseAdminConfig.js');
+const jwtTestRoute = require('./routes/jwtTestRoute.js')
+
 
 
 dotenv.config();
@@ -29,6 +33,8 @@ mongoose.connect(mongoDb)
   // Rutas
 app.use('/users', userRoutes);
 app.use('/activities', userActivity)
+// test jwt firebase
+app.use('/jwt', jwtTestRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello World from green steps server!');
