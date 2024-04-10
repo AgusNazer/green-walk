@@ -6,6 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes.js');
+const userActivity = require('./routes/userActivity.js')
 
 
 dotenv.config();
@@ -27,6 +28,7 @@ mongoose.connect(mongoDb)
 
   // Rutas
 app.use('/users', userRoutes);
+app.use('/activities', userActivity)
 
 app.get('/', (req, res) => {
   res.send('Hello World from green steps server!');
