@@ -13,7 +13,13 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 pub mod metafns {
     pub type State = <ContractMetadata as Metadata>::State;
 
-     pub fn finalstates(state: State, actor: ActorId) -> Vec<&Str> {
-        state.into_iter().map(|(_, state)| state).collect()
+
+    // Add your State functions
+    pub fn get_state(state: State) -> io::IoGreendlyState {
+        let (_, io_greendly_state) = state;
+        io_greendly_state 
     }
+
+
+
 }
