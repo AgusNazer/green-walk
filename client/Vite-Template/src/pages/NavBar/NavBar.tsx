@@ -5,7 +5,7 @@ const NavBar = () => {
   return (
     <nav
   className="fixed z-10 w-full  px-6 py-3 mx-auto text-white ">
-  <div className="flex items-center justify-between text-blue-gray-900">
+  <div className="flex items-center justify-between text-black">
     {/* <a href="/a"
       className="mr-4 block cursor-pointer py-1.5 font-sans text-2xl font-semibold leading-relaxed tracking-normal text-inherit antialiased">
       Green Runner
@@ -13,22 +13,22 @@ const NavBar = () => {
     <img className="sm:w-[7rem] mr-4 block cursor-pointer py-1.5 font-sans font-semibold leading-relaxed tracking-normal text-inherit antialiased" src="/Logogreen.png" alt="logo" />
     <div className="hidden lg:block">
       <ul className="flex flex-col gap-2 my-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-black">
           <button className="flex items-center transition-colors hover:text-blue-500">
             About Us
           </button>
         </li>
-        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-black">
           <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
             Blockchain
           </a>
         </li>
-        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-black">
           <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
             Reward
           </a>
         </li>
-        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-blue-gray-900">
+        <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-black">
           <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
             Account
           </a>
