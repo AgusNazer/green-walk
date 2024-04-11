@@ -34,7 +34,13 @@ mongoose.connect(mongoDb)
 app.use('/users', userRoutes);
 app.use('/activities', userActivity)
 // test jwt firebase
-app.use('/jwt', jwtTestRoute);
+app.use('/verifyToken', jwtTestRoute);
+
+app.use((req, res, next) => {
+  console.log(`Recibida solicitud: ${req.method} ${req.url}`);
+  next();
+});
+
 
 app.get('/', (req, res) => {
   res.send('Hello World from green steps server!');

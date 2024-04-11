@@ -1,32 +1,39 @@
+// // jwtTestRoute.js
 const express = require('express');
-const firebase = require('firebase/app');
-require('firebase/auth');
-
-// Asegúrate de inicializar Firebase en tu app
-const firebaseConfig = {
-  apiKey: "AIzaSyDLv2w5DhwvHfN6NDAmd0u_xJyXSHp0v2U",
-  authDomain: "greendly.firebaseapp.com",
-  // Resto de tu configuración de Firebase
-};
-firebase.initializeApp(firebaseConfig);
+const admin = require('../services/firebaseAdminConfig'); 
 
 const router = express.Router();
 
+// router.get('/', (req, res) => {
+//   const idToken = req.query.token; // O podrías recibir el token en un encabezado de autorización
+
+//   admin.auth().verifyIdToken(idToken)
+//     .then((decodedToken) => {
+//       res.json({ uid: decodedToken.uid, status: "Token verificado correctamente" });
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//       res.status(401).send('Token no válido');
+//     });
+// });
+
+// module.exports = router;
+
 router.get('/', (req, res) => {
-  const email = "userjwt-test@jwt.com"; // Correo electrónico del usuario de prueba
-  const password = "123123"; // Contraseña del usuario de prueba
+    // Asume que el token se pasa en el encabezado de autorización como "Bearer <token>"
+    const header = req.headers.authorization;
+    if (!header || !header.startsWith('Bearer ')) {
+        return res.status(401).send('Token no proporcionado o malformado');
+    }
+    const idToken = header.split('Bearer ')[1];
 
-  firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(({ user }) => {
-      return user.getIdToken();
-    })
-    .then((idToken) => {
-      res.json({ idToken });
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send('Error al generar el token de ID');
-    });
+    admin.auth().verifyIdToken(idToken)
+        .then((decodedToken) => {
+            res.json({ uid: decodedToken.uid, status: "Token verificado correctamente" });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(401).send('Token no válido');
+        });
 });
-
 module.exports = router;
