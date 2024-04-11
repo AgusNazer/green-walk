@@ -14,7 +14,7 @@ function AllBalancesFungibleToken () {
 
  // Add your programID
  const programIDFT =
- "0xaa6fe1b9efdcd34134ee3d552395b134198bd077650e1a11b83ebc326dde7632";
+ "0xc781d3bc5cb55823843f4cf2a5c8f16ea22b78f182272caa6ab44e8c75a1989e";
 
 // Add your metadata.txt
 const meta =

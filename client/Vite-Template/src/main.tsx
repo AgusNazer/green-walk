@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client';
+import 'tailwindcss/tailwind.css';
 import { App } from './app';
 import dotenv from 'dotenv';
 // import { BrowserRouter } from 'react-router-dom'
