@@ -72,7 +72,7 @@ const links = [
               {stats.map((stat) => (
                 <div key={stat.name} className="flex flex-col-reverse">
                   <dt className="text-base leading-7 text-gray-300">{stat.name}</dt>
-                  <dd className="text-2xl font-bold leading-9 tracking-tight text-white">{stat.value}</dd>
+                  <dd className="text-2xl font-bold leading-9 tracking-tight text-[#2d2c2c1e]">{stat.value}</dd>
                 </div>
               ))}
             </dl>
