@@ -45,8 +45,7 @@ function MyStack() {
               size={22}
               color="black"
               style={{ marginLeft: 5 }}
-              onPress={() => {
-                
+              onPress={() => {                
                 navigation.navigate("Settings");
               }}
               />
@@ -102,6 +101,22 @@ export default function BottomTab() {
     >
 
       <Tab.Screen
+        name="Home"
+        component={MyStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="home-circle" size={30} color={color} />
+          ),         
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: "bold",          
+          },
+          tabBarStyle: { backgroundColor: "#eeeeee" },
+        }}
+      />
+
+      <Tab.Screen
         name="Rewards"
         component={Rewards}
         options={{
@@ -120,23 +135,6 @@ export default function BottomTab() {
           tabBarStyle: { backgroundColor: "#eeeeee" },
         }}
       />
-
-      <Tab.Screen
-        name="Home"
-        component={MyStack}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home-circle" size={30} color={color} />
-          ),         
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: "bold",          
-          },
-          tabBarStyle: { backgroundColor: "#eeeeee" },
-        }}
-      />
-
 
       <Tab.Screen
         name="Steps"

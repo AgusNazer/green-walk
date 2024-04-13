@@ -1,47 +1,28 @@
 import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-// import Landing from "./src/pages/Landing";
-// import NavBar from "./src/components/NavBar";
-// import AboutUs from "./src/pages/AboutUs";
-// import Account from "./src/pages/Account";
-// import Blockchain from "./src/pages/Blockchain";
-// import Rewards from "./src/pages/Reward";
-// import "react-native-gesture-handler";
-// import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import BottomTab from "./src/navigation/BottomTab";
+import Login from "./src/pages/Login";
 
-// const Menu = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <View style={styles.container}>
-      {/* <NavigationContainer>
-        <Menu.Navigator>
-          <Menu.Screen name="Start" options={{
-            headerTitle: "Greendly",
-            headerTintColor: 'black',
-            headerTitleAlign: 'center',
-            headerTitleStyle: {fontWeight: 'bold'},
-            drawerLabel: "Start",
-            drawerStyle: {backgroundColor: '#EEEEEE'},
-            drawerContentContainerStyle: {backgroundColor: '#EEEEEE'},
-            drawerActiveBackgroundColor: '#e0efff',
-            drawerActiveTintColor: 'black',
-          }}
-          component={Landing} />
-          <Menu.Screen name="About Us" component={AboutUs} />
-          <Menu.Screen name="Account" component={Account} />
-          <Menu.Screen name="Blockchain" component={Blockchain} />
-          <Menu.Screen name="Rewards" component={Rewards} />
-        </Menu.Navigator>
-      </NavigationContainer> */}
-
+  
       <NavigationContainer>
-        <BottomTab />
+        <Stack.Navigator initialRouteName="Landing">
+          <Stack.Screen name="Login" component={Login} options={{
+           headerShown: false,
+          }} />
+          <Stack.Screen name="BottomTab" component={BottomTab} options={{
+            headerShown: false,
+          }}/>
+        </Stack.Navigator>
+        <StatusBar style="auto" />
       </NavigationContainer>
 
-      <StatusBar style="auto" />
     </View>
   );
 }
@@ -52,4 +33,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     // paddingTop: 45,
   },
+  fullScreen: {
+    flex: 1,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1, // Asegura que Landing esté encima de BottomTab
+  }
 });
