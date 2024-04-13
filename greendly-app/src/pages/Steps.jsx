@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export default function AboutUs() {
+export default function Steps() {
   return (
     <View style={styles.container}>
-      <Text>AboutUs</Text>
+      <Text>Steps</Text>
     </View>
   );
 }

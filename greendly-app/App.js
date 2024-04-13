@@ -1,21 +1,22 @@
 import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import Landing from "./pages/Landing";
-import NavBar from "./src/components/NavBar";
-import AboutUs from "./pages/AboutUs";
-import Account from "./pages/Account";
-import Blockchain from "./pages/Blockchain";
-import Rewards from "./pages/Reward";
-import "react-native-gesture-handler";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+// import Landing from "./src/pages/Landing";
+// import NavBar from "./src/components/NavBar";
+// import AboutUs from "./src/pages/AboutUs";
+// import Account from "./src/pages/Account";
+// import Blockchain from "./src/pages/Blockchain";
+// import Rewards from "./src/pages/Reward";
+// import "react-native-gesture-handler";
+// import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
+import BottomTab from "./src/navigation/BottomTab";
 
-const Menu = createDrawerNavigator();
+// const Menu = createDrawerNavigator();
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <NavigationContainer>
+      {/* <NavigationContainer>
         <Menu.Navigator>
           <Menu.Screen name="Start" options={{
             headerTitle: "Greendly",
@@ -25,7 +26,7 @@ export default function App() {
             drawerLabel: "Start",
             drawerStyle: {backgroundColor: '#EEEEEE'},
             drawerContentContainerStyle: {backgroundColor: '#EEEEEE'},
-            drawerActiveBackgroundColor: '#D5F2FD',
+            drawerActiveBackgroundColor: '#e0efff',
             drawerActiveTintColor: 'black',
           }}
           component={Landing} />
@@ -34,6 +35,10 @@ export default function App() {
           <Menu.Screen name="Blockchain" component={Blockchain} />
           <Menu.Screen name="Rewards" component={Rewards} />
         </Menu.Navigator>
+      </NavigationContainer> */}
+
+      <NavigationContainer>
+        <BottomTab />
       </NavigationContainer>
 
       <StatusBar style="auto" />
@@ -44,7 +49,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff879",
-    paddingTop: 45,
+    backgroundColor: "#fff",
+    // paddingTop: 45,
   },
 });
