@@ -11,7 +11,7 @@ export default function Landing() {
   return (
     <View style={styles.container}>
 
-      <Video
+      {/* <Video
         ref={video}
         source={require("../../assets/header.mp4")}
         style={styles.video}
@@ -20,7 +20,7 @@ export default function Landing() {
         shouldPlay
         isLooping
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-      />
+      /> */}
 
       <TouchableOpacity 
         style={styles.contButton}

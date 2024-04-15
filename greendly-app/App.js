@@ -5,24 +5,36 @@ import { createStackNavigator } from "@react-navigation/stack";
 import BottomTab from "./src/navigation/BottomTab";
 import Login from "./src/pages/Login";
 
-const Stack = createStackNavigator();
-
 export default function App() {
+  const Stack = createStackNavigator();
+
+  function MyStack() {
+    return (
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="BottomTab"
+          component={BottomTab}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    );
+  }
+
   return (
     <View style={styles.container}>
-  
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Landing">
-          <Stack.Screen name="Login" component={Login} options={{
-           headerShown: false,
-          }} />
-          <Stack.Screen name="BottomTab" component={BottomTab} options={{
-            headerShown: false,
-          }}/>
-        </Stack.Navigator>
+        <MyStack />
         <StatusBar style="auto" />
       </NavigationContainer>
-
     </View>
   );
 }
@@ -41,5 +53,5 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 1, // Asegura que Landing esté encima de BottomTab
-  }
+  },
 });
