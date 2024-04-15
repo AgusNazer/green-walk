@@ -11,7 +11,6 @@ export default function Login({ navigation }) {
   const LoginWUP = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Iniciando sesion", "Accediendo...");
       navigation.navigate("BottomTab");
     } catch (error) {
       Alert.alert("Error", "Usuario o contraseña incorrecto");
