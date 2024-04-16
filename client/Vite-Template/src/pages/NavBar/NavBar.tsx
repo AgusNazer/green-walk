@@ -29,7 +29,7 @@ const NavBar = () => {
           </a>
         </li>
         <li className="block p-1 font-sans text-2xl antialiased font-medium leading-normal text-black">
-          <a href="/a" className="flex items-center transition-colors hover:text-blue-500">
+          <a href="/dashboard" className="flex items-center transition-colors hover:text-blue-500">
             Account
           </a>
         </li>

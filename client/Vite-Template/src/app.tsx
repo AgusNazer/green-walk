@@ -7,13 +7,16 @@ import { useWalletSync } from "@/features/wallet/hooks";
 import { Home } from "./pages/home";
 import { Mint } from "./fungibleToken/Mint";
 import LoginPage from "./pages/LoginPage";
-import { Routes, Route  } from 'react-router-dom'
+import { Routes, Route, useLocation  } from 'react-router-dom'
 import NavBar from "./pages/NavBar/NavBar";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 function Component() {
   const { isApiReady } = useApi();
   const { isAccountReady } = useAccount();
+  const location = useLocation();
 
+  const shouldShowSidebar = ![ '/dashboard/plants'].includes(location.pathname);
   useWalletSync();
 
   const isAppReady = isApiReady && isAccountReady;
@@ -25,12 +28,14 @@ function Component() {
 
   return (
     <div>
-          <Header isAccountVisible={isAccountReady}/>
-          <NavBar/>
+            {shouldShowSidebar && 
+        location.pathname !== '/dashboard' && <NavBar/>}  
+          {/* <Header isAccountVisible={isAccountReady}/> */}
           <Routes>
               <Route path="/" element={<LoginPage />} />
               <Route path="/mint" element={<Mint />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard/>} />           
           </Routes>
       </div>
   );
