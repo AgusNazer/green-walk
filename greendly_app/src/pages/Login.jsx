@@ -18,16 +18,6 @@ export default function Login({ navigation }) {
     }
   };
 
-  // const LoginWG = async () => {
-  //   try {
-  //     await doSignInWithGoogle();
-  //     Alert.alert("Iniciando sesion", "Accediendo...");
-  //     props.navigation.navigate("BottomTab");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
   const [showInputs, setShowInputs] = useState(false);
 
   const toggleInputs = () => {
