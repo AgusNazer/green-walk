@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "greendly-app",
-    "slug": "greendly-app",
+    "name": "greendly_app",
+    "slug": "greendly_app",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -21,8 +21,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.anonymous.greendlyapp"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

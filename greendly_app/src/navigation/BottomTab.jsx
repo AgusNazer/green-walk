@@ -3,7 +3,7 @@ import Steps from "../pages/Steps";
 import Blockchain from "../pages/Blockchain";
 import Rewards from "../pages/Reward";
 import Account from "../pages/Account";
-import Landing from "../pages/Home";
+import Login from "../pages/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,7 +21,7 @@ function MyStack() {
 
       <HomeStack.Screen
         name="Greendly"
-        component={Landing}
+        component={Login}
         options={({ navigation }) => ({
           headerTintColor: "black",
           headerTitleAlign: "center",

@@ -11,16 +11,16 @@ export default function Landing() {
   return (
     <View style={styles.container}>
 
-      {/* <Video
+      <Video
         ref={video}
         source={require("../../assets/header.mp4")}
         style={styles.video}
         useNativeControls={false}
-        resizeMode="cover"
+        resizeMode="cover" 
         shouldPlay
         isLooping
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-      /> */}
+      />
 
       <TouchableOpacity 
         style={styles.contButton}
