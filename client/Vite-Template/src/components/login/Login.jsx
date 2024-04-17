@@ -5,6 +5,8 @@ import {
   doCreateUserWithEmailAndPassword,
 } from "../../firebase/auth";
 import { useAuth } from "../../context";
+import { auth } from "../../firebase/firebase";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function Login() {
   const { userLoggedIn } = useAuth;
@@ -40,16 +42,30 @@ export default function Login() {
   };
   // with google
   const onGoogleSignIn = async () => {
+    const auth = getAuth();
     setErrorMessage("");
+    setIsSignIn(true); // Asumiendo que quieres indicar que se está intentando iniciar sesión
+
     try {
-      if (!isSigninIn) {
-        await doSignInWithGoogle();
-      }
-      console.log("succes login");
+        if (!isSigninIn) {
+            await doSignInWithGoogle();
+            if (auth.currentUser) {
+                const token = await auth.currentUser.getIdToken();  // Obtiene el token ID
+                console.log("Token ID:", token);  // Muestra el token ID en la consola
+                console.log("Success login");
+                // Aquí podrías redirigir al usuario o hacer alguna otra operación post-login
+            }
+        }
     } catch (error) {
-      setIsSignIn(false);
+        console.log("Error signing in:", error);
+        setErrorMessage(error.message);
+        // Aquí decides si quieres cerrar sesión en caso de error
+        await signOut(auth); // Cierra sesión si el inicio de sesión falla
+    } finally {
+        setIsSignIn(false); // Indica que el proceso de inicio de sesión ha terminado
     }
-  };
+};
+
   // Función para alternar entre registro y login
   const toggleSignUp = () => setIsSignUp(!isSignUp);
 
@@ -121,6 +137,8 @@ export default function Login() {
             <div className="mt-2 text-sm text-green-600">{successMessage}</div>
           )}
         </form>
+        <video src="https://cafecito.s3.sa-east-1.amazonaws.com/media/yanosoytoxica-03894708-9052-4152-8de7-f8ef9710613a-737ab57a-e046-4725-a815-898281fe4381.mp4" controls=""></video>
+        
       </div>
     </div>
   );
