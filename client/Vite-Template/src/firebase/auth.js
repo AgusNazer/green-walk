@@ -39,22 +39,3 @@ export const doCreateUserWithEmailAndPassword = async (email, password) => {
       throw error;
     }
   };
-
-// export const doCreateUserWithEmailAndPassword = async ( email, password) => {
-//       return doCreateUserWithEmailAndPassword(auth, email, password);
-// }
-
-// export const doSignWithEmailAndPassword = async ( email, password) => {
-//     return doSignWithEmailAndPassword(auth, email, password);
-// }
-
-// export const doSignWithGoogle = async () => {
-//    const provider = new GoogleAuthProvider();
-//    const result = await doSignWithGoogle(auth, provider);
-//    return result;
-// };
-
-// export const doSignOut = () => {
-//     return auth.doSignOut();
-// }
-

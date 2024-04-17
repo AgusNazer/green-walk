@@ -20,20 +20,24 @@ const router = express.Router();
 // module.exports = router;
 
 router.get('/', (req, res) => {
-    // Asume que el token se pasa en el encabezado de autorización como "Bearer <token>"
     const header = req.headers.authorization;
     if (!header || !header.startsWith('Bearer ')) {
+        console.log("Token no proporcionado o malformado");
         return res.status(401).send('Token no proporcionado o malformado');
     }
+
     const idToken = header.split('Bearer ')[1];
+    console.log("Verificando token:", idToken);
 
     admin.auth().verifyIdToken(idToken)
         .then((decodedToken) => {
+            console.log("Token verificado correctamente", decodedToken);
             res.json({ uid: decodedToken.uid, status: "Token verificado correctamente" });
         })
         .catch((error) => {
-            console.error(error);
+            console.error("Error al verificar token:", error);
             res.status(401).send('Token no válido');
         });
 });
+
 module.exports = router;
