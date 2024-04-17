@@ -1,9 +1,18 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text , Button , Alert } from "react-native";
 import { Video } from "expo-av";
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios'
 
 export default function Landing() {
+  const handleGetRequest = async () => {
+    try {
+      const response = await axios.get('http://192.168.1.51:3002/hola');
+      Alert.alert('Respuesta:', JSON.stringify(response.data));
+    } catch (error) {
+      Alert.alert('Error:', error.message);
+    }
+  };
   const video = React.useRef(null);
   const [status, setStatus] = React.useState({});
   const navigation = useNavigation();
@@ -11,27 +20,25 @@ export default function Landing() {
   return (
     <View style={styles.container}>
 
-      {/* <Video
-        ref={video}
-        source={require("../../assets/header.mp4")}
-        style={styles.video}
-        useNativeControls={false}
-        resizeMode="cover" 
-        shouldPlay
-        isLooping
-        onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-      /> */}
+    <TouchableOpacity 
+      style={styles.contButton}
+      onPress={() => navigation.navigate('Blockchain')}
+    >
+      <Text>
+        Go to Blockchain 
+      </Text>
+    </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={styles.contButton}
-        onPress={() => navigation.navigate('Blockchain')}
-      >
-        <Text>
-          Go to Blockchain 
-        </Text>
-      </TouchableOpacity>
+    <TouchableOpacity 
+      style={styles.contButton}
+      onPress={handleGetRequest}
+    >
+      <Text>
+        Make GET Request 
+      </Text>
+    </TouchableOpacity>
 
-    </View>
+  </View>
   );
 }
 

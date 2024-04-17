@@ -2,6 +2,7 @@
 const express = require('express');
 const admin = require('../services/firebaseAdminConfig'); 
 
+
 const router = express.Router();
 
 // router.get('/', (req, res) => {
@@ -36,4 +37,5 @@ router.get('/', (req, res) => {
             res.status(401).send('Token no válido');
         });
 });
+
 module.exports = router;
