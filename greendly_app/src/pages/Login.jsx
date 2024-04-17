@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, Alert,} from "react-native";
 import appfirebase from "../../firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { Video } from 'expo-av'
 
 const auth = getAuth(appfirebase);
 export default function Login({ navigation }) {
@@ -26,10 +27,14 @@ export default function Login({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../../assets/Landing.jpg")}
-        style={styles.image}
-      />
+<Video
+  source={require("../../assets/loginvideo.mp4")}
+  style={styles.video}
+  resizeMode="cover"
+  isLooping={true} // Utiliza isLooping en lugar de repeat
+  shouldPlay // Inicia la reproducción automáticamente
+/>
+
 
       <View style={styles.childContainer}>
         <View>
@@ -102,11 +107,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  image: {
+  video: {
     position: "absolute",
     top: 0,
+    left: 0,
     bottom: 0,
-    resizeMode: "cover",
+    right: 0,
   },
   childContainer: {
     flex: 1,

@@ -5,8 +5,13 @@ import {
   doCreateUserWithEmailAndPassword,
 } from "../../firebase/auth";
 import { useAuth } from "../../context";
+import { auth } from "../../firebase/firebase";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Login() {
+  const navigate = useNavigate();
   const { userLoggedIn } = useAuth;
 
   const [email, setEmail] = useState("");
@@ -15,6 +20,9 @@ export default function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isVisible, setIsVisible] = useState(true);
+
+  
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -26,11 +34,13 @@ export default function Login() {
         // Registro de nuevo usuario
         await doCreateUserWithEmailAndPassword(email, password);
         alert("Registro exitoso");
+        navigate('/map');
       } else {
         // Inicio de sesión de usuario existente
         await doSignInWithEmailAndPassword(email, password);
         // console.log("Inicio de sesión exitoso");
         setSuccessMessage("Inicio de sesión exitoso. Bienvenido/a de nuevo.");
+        navigate('/map');
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -40,18 +50,34 @@ export default function Login() {
   };
   // with google
   const onGoogleSignIn = async () => {
+    const auth = getAuth();
     setErrorMessage("");
+    setIsSignIn(true); // Asumiendo que quieres indicar que se está intentando iniciar sesión
+
     try {
-      if (!isSigninIn) {
-        await doSignInWithGoogle();
-      }
-      console.log("succes login");
+        if (!isSigninIn) {
+            await doSignInWithGoogle();
+            if (auth.currentUser) {
+                const token = await auth.currentUser.getIdToken();  // Obtiene el token ID
+                console.log("Token ID:", token);  // Muestra el token ID en la consola
+                console.log("Success login");
+                navigate('/map');
+                
+            }
+        }
     } catch (error) {
-      setIsSignIn(false);
+        console.log("Error signing in:", error);
+        setErrorMessage(error.message);
+        // Aquí decides si quieres cerrar sesión en caso de error
+        await signOut(auth); // Cierra sesión si el inicio de sesión falla
+    } finally {
+        setIsSignIn(false); // Indica que el proceso de inicio de sesión ha terminado
     }
-  };
+};
+
   // Función para alternar entre registro y login
   const toggleSignUp = () => setIsSignUp(!isSignUp);
+  
 
   return (
     <div className="flex items-center justify-center p-6 bg-opacity-60">
@@ -121,6 +147,8 @@ export default function Login() {
             <div className="mt-2 text-sm text-green-600">{successMessage}</div>
           )}
         </form>
+        <video src="https://cafecito.s3.sa-east-1.amazonaws.com/media/yanosoytoxica-03894708-9052-4152-8de7-f8ef9710613a-737ab57a-e046-4725-a815-898281fe4381.mp4" controls=""></video>
+        
       </div>
     </div>
   );
