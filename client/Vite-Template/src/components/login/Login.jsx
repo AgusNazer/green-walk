@@ -7,8 +7,11 @@ import {
 import { useAuth } from "../../context";
 import { auth } from "../../firebase/firebase";
 import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Login() {
+  const navigate = useNavigate();
   const { userLoggedIn } = useAuth;
 
   const [email, setEmail] = useState("");
@@ -17,6 +20,9 @@ export default function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isVisible, setIsVisible] = useState(true);
+
+  
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -28,11 +34,13 @@ export default function Login() {
         // Registro de nuevo usuario
         await doCreateUserWithEmailAndPassword(email, password);
         alert("Registro exitoso");
+        navigate('/map');
       } else {
         // Inicio de sesión de usuario existente
         await doSignInWithEmailAndPassword(email, password);
         // console.log("Inicio de sesión exitoso");
         setSuccessMessage("Inicio de sesión exitoso. Bienvenido/a de nuevo.");
+        navigate('/map');
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -53,7 +61,8 @@ export default function Login() {
                 const token = await auth.currentUser.getIdToken();  // Obtiene el token ID
                 console.log("Token ID:", token);  // Muestra el token ID en la consola
                 console.log("Success login");
-                // Aquí podrías redirigir al usuario o hacer alguna otra operación post-login
+                navigate('/map');
+                
             }
         }
     } catch (error) {
@@ -68,6 +77,7 @@ export default function Login() {
 
   // Función para alternar entre registro y login
   const toggleSignUp = () => setIsSignUp(!isSignUp);
+  
 
   return (
     <div className="flex items-center justify-center p-6 bg-opacity-60">

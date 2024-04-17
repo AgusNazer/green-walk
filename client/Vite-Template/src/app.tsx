@@ -9,9 +9,12 @@ import { Mint } from "./fungibleToken/Mint";
 import LoginPage from "./pages/LoginPage";
 import { Routes, Route, useLocation  } from 'react-router-dom'
 import NavBar from "./pages/NavBar/NavBar";
+import GoogleMaps from "./apiMaps/GoogleMaps";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
 function Component() {
+
+  const apiKey = import.meta.env.VITE_API_KEY_GOOGLE_MAPS; 
   const { isApiReady } = useApi();
   const { isAccountReady } = useAccount();
   const location = useLocation();
@@ -35,6 +38,7 @@ function Component() {
               <Route path="/" element={<LoginPage />} />
               <Route path="/mint" element={<Mint />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/map" element={<GoogleMaps apiKey={apiKey} />} />
               <Route path="/dashboard" element={<Dashboard/>} />           
           </Routes>
       </div>
