@@ -5,6 +5,6 @@ const app = require('./src/app.js');
 
 const port = process.env.PORT || 3001;
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(port, '192.168.1.51', () => {
+  console.log(`Servidor Express escuchando en http://192.168.1.51:${port}`);
 });

@@ -4,6 +4,7 @@ import styles from './LoginPage.module.css';
 import Hero from '@/components/Hero/Hero';
 import HeroInformative from '@/components/InformativeSection/HeroInformative';
 import { AllBalancesFungibleToken } from '@/FTComponents/AllBalancesFungibleToken';
+import VideoHero from '@/components/VideoHero/VideoHero';
 
 const LoginPage: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const LoginPage: React.FC = () => {
       <Header/>
       <Hero/>
       <HeroInformative/>
+      <VideoHero/>
     </div>
   );
 };
