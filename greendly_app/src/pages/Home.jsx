@@ -54,7 +54,7 @@ export default function Landing() {
       style={styles.contButton}
       onPress={() => navigation.navigate('Blockchain')}
     >
-      <Text>
+      <Text className="text-white">
         Go to Blockchain 
       </Text>
     </TouchableOpacity>

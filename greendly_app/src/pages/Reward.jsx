@@ -1,10 +1,11 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
+import CardReward from '../components/CardsRewards/CardReward'
 
 export default function Rewards() {
   return (
-    <View style={styles.container}>
-      <Text>Rewards</Text>
+    <View className="flex-1 items-center justify-start">
+      <CardReward/>
     </View>
   );
 }
