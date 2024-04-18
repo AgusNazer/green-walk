@@ -3,7 +3,10 @@ import { View, StyleSheet, TouchableOpacity, Text, BackHandler, ToastAndroid } f
 import { useNavigation } from "@react-navigation/native";
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline  } from 'react-native-maps';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import themes from '../themeMap';
 
+const { themeDark, themeLight } = themes;
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371e3;
@@ -44,6 +47,7 @@ export default function Home() {
   const [totalDistance, setTotalDistance] = useState(0); 
   const [backPressCount, setBackPressCount] = useState(0);
   const [timeoutId, setTimeoutId] = useState(null);
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
     const backAction = () => {
@@ -65,7 +69,7 @@ export default function Home() {
 
     return () => {
       backHandler.remove();
-      clearTimeout(timeoutId); // Limpia el temporizador al desmontar el componente
+      clearTimeout(timeoutId);
     };
   }, [backPressCount, timeoutId]);
 
@@ -165,6 +169,8 @@ export default function Home() {
       setTotalDistance(distance);
     }
   }, [locations, isRecording]);
+  
+  const customMapStyle = dark ? themeDark : themeLight;
 
   return (
     <View style={styles.container}>
@@ -179,7 +185,11 @@ export default function Home() {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
-        showsUserLocation={true}
+        showsUserLocation={true}      
+        zoomControlEnabled={true}
+        zoomEnabled={true}
+        showsBuildings={true}
+        customMapStyle={customMapStyle}
       >
         {locations.length > 0 && (
           <>
@@ -215,6 +225,24 @@ export default function Home() {
         )}
       </MapView>
 
+      <TouchableOpacity
+        onPress={() => setDark((prevDark) => !prevDark)}
+        style={{
+          backgroundColor: "#FFF",
+          height: 30,
+          borderRadius: 15,
+          width: 30,
+          alignItems: "center",
+          justifyContent: "center",
+          position: "absolute",
+          marginTop: 70,
+          alignSelf: "flex-end",
+          right: 15,
+        }}
+      >
+        <FontAwesome name="adjust" size={30} />
+      </TouchableOpacity>
+
       <TouchableOpacity 
         style={[styles.button, isRecording ? styles.finishButton : styles.startButton]}
         onPress={isRecording ? handleStopRecording : handleStartRecording}
@@ -224,13 +252,29 @@ export default function Home() {
         </Text>
       </TouchableOpacity>
 
-      <Text style={styles.distanceText}>
-        {(totalDistance / 1000).toFixed(2) + ' Km'}
-      </Text>
+      <View className="flex flex-row justify-evenly mb-4" >
+        <View className="flex flex-col justify-center items-center" >
+          <Text style={styles.distanceText}>
+            {(totalDistance / 1000).toFixed(2) + ' Km'}
+          </Text>
 
-      <Text style={styles.timeText}>
-        {formatTime(elapsedTime)}
-      </Text>
+          <Text className="">
+            Distance
+          </Text>
+        </View>
+
+        <View className="flex flex-col justify-center items-center">
+          <Text style={styles.timeText}>
+            {formatTime(elapsedTime)}
+          </Text>
+
+          <Text className="" >
+            Time
+          </Text>
+        </View>
+      </View>
+
+     
 
     </View>
   );
@@ -274,13 +318,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
     textAlign: 'center',
-    marginVertical: 10,
   },
   timeText:{
     color: 'black',
     fontSize: 20,
     fontWeight: '500',
     textAlign: 'center',
-    marginVertical: 10,
   },
 });
