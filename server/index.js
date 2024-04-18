@@ -1,10 +1,25 @@
-// import app from './src/app.js'; 
+// const app = require('./src/app.js');
+
+// const port = process.env.PORT || 3001;
+
+// app.listen(port, '192.168.1.51', () => {
+//   console.log(`Servidor Express escuchando en http://192.168.1.51:${port}`);
+// });
+
+
+
+// Codigo original
+//-------------------------------------------------------------------------------
+// Codigo temporal para traer la IpV4 del equipo local
+
+
+
 const app = require('./src/app.js');
 const os = require('os');
 
 const port = process.env.PORT || 3001;
 
-function getLocalIpAddress() {
+function getLocalIpAddress() { // funcion para traer la IpV4 del equipo local
   const interfaces = os.networkInterfaces();
   for (const interfaceName in interfaces) {
     const iface = interfaces[interfaceName];

@@ -2,6 +2,7 @@ import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios'
 
+import CardReward from '../components/CardsRewards/CardReward'
 
 export default function Rewards() {
 
@@ -20,16 +21,18 @@ export default function Rewards() {
 
   return (
     <View style={styles.container}>
-      <Text>
-        <TouchableOpacity 
-          style={styles.contButton}
-          onPress={handleGetRequest}
-        >
-          <Text>
-            Make GET Request 
-          </Text>
-        </TouchableOpacity>
-      </Text>
+      <TouchableOpacity 
+        style={styles.contButton}
+        onPress={handleGetRequest}
+      >
+        <Text style={styles.buttonText}>
+          Make GET Request 
+        </Text>
+      </TouchableOpacity>
+
+      <View className="items-center justify-start">
+        <CardReward/>
+      </View>
     </View>
   );
 }
@@ -39,21 +42,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    paddingTop: 20,
   },
   contButton: {
-    // position: "absolute",
     alignSelf: 'center',
     height: 50,
     width: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    bottom: 0,
     backgroundColor: '#3AA940',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#000',
-    top: 40,
-    paddingVertical: 15
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
   },
 });

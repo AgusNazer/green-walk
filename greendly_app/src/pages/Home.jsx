@@ -43,28 +43,32 @@ export default function Home() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [totalDistance, setTotalDistance] = useState(0); 
   const [backPressCount, setBackPressCount] = useState(0);
+  const [timeoutId, setTimeoutId] = useState(null);
 
   useEffect(() => {
     const backAction = () => {
-      if (backPressCount < 1) {
-        // Incrementa el contador al presionar el botón de atrás
-        setBackPressCount(prevCount => prevCount + 1);
-        
-        // Muestra un mensaje indicando que debe presionar nuevamente para retroceder
+      if (backPressCount === 0) {
+        setBackPressCount(1);
         ToastAndroid.show('Presiona de nuevo para salir', ToastAndroid.SHORT);
-        
-        // Evita que se realice la acción predeterminada al presionar el botón de atrás
+        const id = setTimeout(() => {
+          setBackPressCount(0);
+        }, 3000);
+        setTimeoutId(id);
         return true;
       } else {
-        // Si se ha presionado tres veces, permite el retroceso
+        clearTimeout(timeoutId); 
         return false;
       }
     };
 
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
-    return () => backHandler.remove();
-  }, [backPressCount]);
+    return () => {
+      backHandler.remove();
+      clearTimeout(timeoutId); // Limpia el temporizador al desmontar el componente
+    };
+  }, [backPressCount, timeoutId]);
+
 
   useEffect(() => { 
     (async () => {

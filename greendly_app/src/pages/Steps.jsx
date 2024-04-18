@@ -1,19 +1,11 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function Steps() {
   return (
-    <View style={styles.container}>
-      <Text>Steps</Text>
+    <View className="bg-gray-900 flex-1 justify-center items-center" >
+      <Text className="text-white" >Steps</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
