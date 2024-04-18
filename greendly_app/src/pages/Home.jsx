@@ -48,6 +48,12 @@ export default function Home() {
   const [backPressCount, setBackPressCount] = useState(0);
   const [timeoutId, setTimeoutId] = useState(null);
   const [dark, setDark] = useState(false);
+  const [locationLoaded, setLocationLoaded] = useState(false);
+
+  // const longitude = location.coords.longitude;
+  // const latitude = location.coords.latitude;
+
+  console.log(location,)
 
   useEffect(() => {
     const backAction = () => {
@@ -72,7 +78,7 @@ export default function Home() {
       clearTimeout(timeoutId);
     };
   }, [backPressCount, timeoutId]);
-
+  
 
   useEffect(() => { 
     (async () => {
@@ -84,6 +90,7 @@ export default function Home() {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      setLocationLoaded(true);
     })();
   }, []);  
 
@@ -169,19 +176,18 @@ export default function Home() {
       setTotalDistance(distance);
     }
   }, [locations, isRecording]);
-  
+
   const customMapStyle = dark ? themeDark : themeLight;
 
   return (
     <View style={styles.container}>
-     
-      <MapView
+
+      {locationLoaded && location ? (
+        <MapView
         style={styles.map}
         initialRegion={{
-          latitude: locations.length > 0 ? locations[0].latitude : 0,
-          longitude: locations.length > 0 ? locations[0].longitude : 0,
-          latitude: 4.6279183, 
-          longitude: -74.1375032,
+          latitude: location ? location.coords.latitude : 0,
+          longitude: location ? location.coords.longitude : 0,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
@@ -224,6 +230,9 @@ export default function Home() {
           </>
         )}
       </MapView>
+      ) : (
+        <Text>Cargando ubicación...</Text>
+      )}            
 
       <TouchableOpacity
         onPress={() => setDark((prevDark) => !prevDark)}
