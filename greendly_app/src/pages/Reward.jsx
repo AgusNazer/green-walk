@@ -1,6 +1,8 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios'
+import {Notifications} from 'expo'
+import * as Permissions from 'expo-permissions'
 
 import CardReward from '../components/CardsRewards/CardReward'
 
@@ -23,7 +25,6 @@ export default function Rewards() {
     <View style={styles.container}>
       <TouchableOpacity 
         style={styles.contButton}
-        onPress={handleGetRequest}
       >
         <Text style={styles.buttonText}>
           Make GET Request 
@@ -32,6 +33,7 @@ export default function Rewards() {
 
       <View className="items-center justify-start">
         <CardReward/>
+        
       </View>
     </View>
   );
