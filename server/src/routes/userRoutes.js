@@ -5,6 +5,9 @@ const userController = require('../controllers/userController');
 // registro de usuario
 router.post('/register', userController.register);
 
+router.post('/saveUser', userController.saveUser);
+
+
 // inicio de sesion ( JWT )
 // router.post('/login', userController.login);
 
