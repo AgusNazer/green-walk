@@ -8,23 +8,6 @@ import themes from '../themeMap';
 
 const { themeDark, themeLight } = themes;
 
-<<<<<<< HEAD
-export default function Landing() {
-  const handleGetRequest = async () => {
-    try {
-      const response = await axios.post('http://192.168.1.74:3002/hola',{
-        "addresLocal": "5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK",
-        "accountTo": "5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE",
-        "quantity": 10
-      });
-      Alert.alert('Respuesta:', JSON.stringify(response.data));
-    } catch (error) {
-      Alert.alert('Error:', error.message);
-    }
-  };
-  const video = React.useRef(null);
-  const [status, setStatus] = React.useState({});
-=======
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371e3;
   const phi1 = lat1 * (Math.PI / 180);
@@ -52,7 +35,6 @@ const formatTime = (milliseconds) => {
 
 export default function Home() {
  
->>>>>>> c03532aca3ddc710a11dd38a946938c8931839b0
   const navigation = useNavigation();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
