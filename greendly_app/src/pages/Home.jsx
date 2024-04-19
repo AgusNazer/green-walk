@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text , Button , Alert } from "react-native";
-import { Video } from "expo-av";
+import { View, StyleSheet, TouchableOpacity, Text, BackHandler, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import axios from 'axios'
 import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline  } from 'react-native-maps';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import themes from '../themeMap';
 
+const { themeDark, themeLight } = themes;
 
+<<<<<<< HEAD
 export default function Landing() {
   const handleGetRequest = async () => {
     try {
@@ -22,11 +24,81 @@ export default function Landing() {
   };
   const video = React.useRef(null);
   const [status, setStatus] = React.useState({});
+=======
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371e3;
+  const phi1 = lat1 * (Math.PI / 180);
+  const phi2 = lat2 * (Math.PI / 180);
+  const deltaPhi = (lat2 - lat1) * (Math.PI / 180);
+  const deltaLambda = (lon2 - lon1) * (Math.PI / 180);
+
+  const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+    Math.cos(phi1) * Math.cos(phi2) *
+    Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = R * c;
+  return distance;
+};
+
+const formatTime = (milliseconds) => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
+export default function Home() {
+ 
+>>>>>>> c03532aca3ddc710a11dd38a946938c8931839b0
   const navigation = useNavigation();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [locations, setLocations] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [timerId, setTimerId] = useState(null);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [totalDistance, setTotalDistance] = useState(0); 
+  const [backPressCount, setBackPressCount] = useState(0);
+  const [timeoutId, setTimeoutId] = useState(null);
+  const [dark, setDark] = useState(false);
+  const [locationLoaded, setLocationLoaded] = useState(false);
+
+  // const longitude = location.coords.longitude;
+  // const latitude = location.coords.latitude;
+
+  console.log(location,)
 
   useEffect(() => {
+    const backAction = () => {
+      if (backPressCount === 0) {
+        setBackPressCount(1);
+        ToastAndroid.show('Presiona de nuevo para salir', ToastAndroid.SHORT);
+        const id = setTimeout(() => {
+          setBackPressCount(0);
+        }, 3000);
+        setTimeoutId(id);
+        return true;
+      } else {
+        clearTimeout(timeoutId); 
+        return false;
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => {
+      backHandler.remove();
+      clearTimeout(timeoutId);
+    };
+  }, [backPressCount, timeoutId]);
+  
+
+  useEffect(() => { 
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -36,8 +108,9 @@ export default function Landing() {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      setLocationLoaded(true);
     })();
-  }, []);
+  }, []);  
 
   let text = 'Waiting..';
   if (errorMsg) {
@@ -46,50 +119,191 @@ export default function Landing() {
     text = `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`;
   }
 
+  const handleStartRecording = async () => {
+    try {
+      setIsRecording(true);
+      setIsTimerRunning(true);
+      setStartTime(new Date().getTime());
+
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission denied', 'Permission to access location was denied.');
+        setIsRecording(false);
+        setIsTimerRunning(false);
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setLocations([...locations, location.coords]);
+
+      const id = setInterval(async () => {
+        const currentLocation = await Location.getCurrentPositionAsync({});
+        setLocations(prevLocations => [...prevLocations, currentLocation.coords]);
+      }, 10000);
+      setTimerId(id);
+    } catch (error) {
+      Alert.alert('Error', error.message);
+      setIsRecording(false);
+      setIsTimerRunning(false);
+    }
+  };
+
+  const handleStopRecording = () => {
+    setIsRecording(false);
+    setIsTimerRunning(false);
+    clearInterval(timerId);
+    setTimerId(null);
+  };
+
+  useEffect(() => {
+    let intervalId;
+    if (isTimerRunning) {
+      intervalId = setInterval(() => {
+        const now = new Date().getTime();
+        const elapsed = now - startTime;
+        setElapsedTime(elapsed);
+      }, 1000);
+    } else {
+      clearInterval(intervalId);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isTimerRunning, startTime]);
+
+  const calculateTotalDistance = () => {
+    let calculatedDistance = 0;
+    for (let i = 1; i < locations.length; i++) {
+      const prevLocation = locations[i - 1];
+      const currentLocation = locations[i];
+      const distance = calculateDistance(
+        prevLocation.latitude,
+        prevLocation.longitude,
+        currentLocation.latitude,
+        currentLocation.longitude
+      );
+      if (isRecording && distance >= 5) {
+        calculatedDistance += distance;
+      }
+    }
+    return calculatedDistance;
+  };
+
+  useEffect(() => {
+    if (isRecording) {
+      const distance = calculateTotalDistance();
+      setTotalDistance(distance);
+    }
+  }, [locations, isRecording]);
+
+  const customMapStyle = dark ? themeDark : themeLight;
 
   return (
     <View style={styles.container}>
 
-    <TouchableOpacity 
-      style={styles.contButton}
-      onPress={() => navigation.navigate('Blockchain')}
-    >
-      <Text>
-        Go to Blockchain 
-      </Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity 
-      style={styles.contButton}
-      onPress={handleGetRequest}
-    >
-      <Text>
-        Make GET Request 
-      </Text>
-    </TouchableOpacity>
-    {location ? (
+      {locationLoaded && location ? (
         <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title="Mi ubicación"
-            description="Aquí estoy"
-          />
-        </MapView>
+        style={styles.map}
+        initialRegion={{
+          latitude: location ? location.coords.latitude : 0,
+          longitude: location ? location.coords.longitude : 0,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+        showsUserLocation={true}      
+        zoomControlEnabled={true}
+        zoomEnabled={true}
+        showsBuildings={true}
+        customMapStyle={customMapStyle}
+      >
+        {locations.length > 0 && (
+          <>
+            <Polyline
+              coordinates={locations.map(loc => ({
+                latitude: loc.latitude,
+                longitude: loc.longitude,
+              }))}
+              strokeWidth={4}
+              strokeColor="#3AA940"
+            />
+            <Marker
+              coordinate={{
+                latitude: locations[0].latitude,
+                longitude: locations[0].longitude,
+              }}
+              title="Inicio"
+              description="Inicio del recorrido"
+              pinColor="#1D57CB"
+            />
+            {locations.length > 1 && (
+              <Marker
+                coordinate={{
+                  latitude: locations[locations.length - 1].latitude,
+                  longitude: locations[locations.length - 1].longitude,
+                }}
+                title="Fin"
+                description="Fin del recorrido"
+                pinColor="red"
+              />
+            )}
+          </>
+        )}
+      </MapView>
       ) : (
-        <Text>Cargando...</Text>
-      )}
-  </View>
+        <Text>Cargando ubicación...</Text>
+      )}            
+
+      <TouchableOpacity
+        onPress={() => setDark((prevDark) => !prevDark)}
+        style={{
+          backgroundColor: "#FFF",
+          height: 30,
+          borderRadius: 15,
+          width: 30,
+          alignItems: "center",
+          justifyContent: "center",
+          position: "absolute",
+          marginTop: 70,
+          alignSelf: "flex-end",
+          right: 15,
+        }}
+      >
+        <FontAwesome name="adjust" size={30} />
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        style={[styles.button, isRecording ? styles.finishButton : styles.startButton]}
+        onPress={isRecording ? handleStopRecording : handleStartRecording}
+      >
+        <Text style={styles.buttonText}>
+          {isRecording ? 'FINISH' : 'START'}
+        </Text>
+      </TouchableOpacity>
+
+      <View className="flex flex-row justify-evenly mb-4" >
+        <View className="flex flex-col justify-center items-center" >
+          <Text style={styles.distanceText}>
+            {(totalDistance / 1000).toFixed(2) + ' Km'}
+          </Text>
+
+          <Text className="">
+            Distance
+          </Text>
+        </View>
+
+        <View className="flex flex-col justify-center items-center">
+          <Text style={styles.timeText}>
+            {formatTime(elapsedTime)}
+          </Text>
+
+          <Text className="" >
+            Time
+          </Text>
+        </View>
+      </View>
+
+     
+
+    </View>
   );
 }
 
@@ -99,50 +313,43 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: '#fff'
   },
-  video: {
-    // position: "absolute",
-    height: 270,
-    left: 0,
-    right: 0,
-  },
-  contButton: {
-    // position: "absolute",
+  button: {
     alignSelf: 'center',
-    height: 50,
-    width: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    bottom: 0,
-    backgroundColor: '#3AA940',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#000',
-    top: 40
+    backgroundColor: '#007bff',
+    padding: 15,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: '50%'
+  },
+  startButton: {
+    backgroundColor: '#007bff',
+  },
+  finishButton: {
+    backgroundColor: '#D93535',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,    
   },
   map: {
-    alignSelf: 'center',
-    height: 300,
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    bottom: 0,
-    backgroundColor: '#3AA940',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#000',
-    top: 40
+    flex: 1,
+    width: '100%',
+    height: '80%'
   },
-  containertwo:{
-    alignSelf: 'center',
-    height: 50,
-    width: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    bottom: 0,
-    backgroundColor: '#3AA940',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#000',
-    top: 40
-  }
+  distanceText:{
+    color: 'black',
+    fontSize: 20,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  timeText:{
+    color: 'black',
+    fontSize: 20,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
 });

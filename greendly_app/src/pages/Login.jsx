@@ -46,6 +46,11 @@ export default function Login({ navigation }) {
         <View style={styles.form}>
           {showInputs && (
             <View style={styles.formSignIn}>
+
+              <View style={styles.containerLognIn}>
+                <Text style={styles.textLognIn}>Login</Text>
+              </View>
+
               <View style={styles.input}>
                 <TextInput
                   onChangeText={(text) => setEmail(text)}
@@ -119,9 +124,24 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 20,
+    fontWeight: "500",
     color: "#ffffff",
+  },
+  containerLognIn: {   
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 5,
+    backgroundColor: "#ebe9e97c",
+    borderRadius: 30,
+    width: '60%',
+    alignSelf: "center",
+    paddingVertical: 5,
+  },
+  textLognIn: { 
+    fontSize: 20,
+    fontWeight: '500',
+    color: "black"
   },
   form: {
     width: "90%",
