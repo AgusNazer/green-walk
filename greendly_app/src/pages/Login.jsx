@@ -1,21 +1,44 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, Alert,} from "react-native";
 import appfirebase from "../../firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+// import * as Google from 'expo-auth-session/providers/google';
 import { Video } from 'expo-av'
+import axios from "axios";
+
 
 const auth = getAuth(appfirebase);
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const LoginWUP = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const useCredential = await signInWithEmailAndPassword(auth, email, password);
+      const { uid, email: userEmail } = useCredential.user;
+
+      // Guarda el usuario en la base de datos de MongoDB
+      await saveUserInMongoDB(uid, userEmail);
+
       navigation.navigate("BottomTab");
     } catch (error) {
       Alert.alert("Error", "Usuario o contraseña incorrecto");
       console.log(error);
+    }
+  };
+
+
+  // Función para guardar el usuario en MongoDB
+  const saveUserInMongoDB = async (uid, email) => {
+    try {
+      const response = await axios.post('http://192.168.1.74:3002/users/saveUser', {
+        uid,
+        email
+      });
+      console.log('User saved in MongoDB:', response.data);
+    } catch (error) {
+      console.error('Failed to save user in MongoDB', error);
     }
   };
 
@@ -24,6 +47,31 @@ export default function Login({ navigation }) {
   const toggleInputs = () => {
     setShowInputs(!showInputs);
   };
+
+  // GoogleSignin.configure({
+  //   webClientId: 'project-749114756416.apps.googleusercontent.com',
+  // });
+
+  // const googleLogin = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
+  //     const { idToken } = userInfo;
+  //     const googleCredential = GoogleAuthProvider.credential(idToken);
+  
+  //     // Autenticación con Firebase usando las credenciales de Google
+  //     const auth = getAuth();
+  //     await signInWithCredential(auth, googleCredential);
+  
+  //     // Aquí podrías llamar a `saveUserInMongoDB` con la información del usuario si es necesario
+  
+  //     // Si todo es exitoso, redirige al usuario a la pantalla "BottomTab"
+  //     navigation.navigate("BottomTab");
+  //   } catch (error) {
+  //     Alert.alert("Login Failed", error.message);
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -78,12 +126,13 @@ export default function Login({ navigation }) {
         <View style={styles.form}>
           <TouchableOpacity style={styles.btnLogin} onPress={toggleInputs}>
             <Text style={{ fontWeight: "600" }}>
-              Sign In wiht Email and Password
+              Sign In with Email and Password
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.btnLogin}
+            // onPress={googleLogin}
             onPress={() => navigation.navigate("BottomTab")}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>

@@ -1,15 +1,12 @@
-// import express from 'express';
-// import mongoose from 'mongoose';
-// import dotenv from 'dotenv';
-// import userRoutes from './routes/userRoutes.js'
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes.js');
-const userActivity = require('./routes/userActivity.js')
+// const userActivity = require('./routes/userActivity.js')
+// const updateProfile = require('./routes/userRoutes.js')
 // test de firebase jwt
 // require('./services/firebaseAdminConfig.js');
-const jwtTestRoute = require('./routes/jwtTestRoute.js')
+// const jwtTestRoute = require('./routes/jwtTestRoute.js')
 const {GearApi , ProgramMetadata , GearKeyring , decodeAddress} = require('@gear-js/api')
 const bodyParser = require('body-parser');
 
@@ -25,6 +22,8 @@ app.use(bodyParser.json());
 
 
 
+
+
 // Conexión a la base de datos
 const mongoDb= process.env.MONGODB_URI;
 if (!mongoDb) {
@@ -37,9 +36,9 @@ mongoose.connect(mongoDb)
 
   // Rutas
 app.use('/users', userRoutes);
-app.use('/activities', userActivity)
-// test jwt firebase
-app.use('/verifyToken', jwtTestRoute);
+
+
+
 
 app.use((req, res, next) => {
   console.log(`Recibida solicitud: ${req.method} ${req.url}`);
