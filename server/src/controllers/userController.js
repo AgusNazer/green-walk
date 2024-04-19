@@ -30,7 +30,32 @@ const userController = {
     }
   },
 
-  // más métodos al controlador
+  //Update profile
+  async updateProfile(req, res) {
+    try {
+      const userId = req.params.id;
+      const { country, objective, carbonFootprint, photoUrl } = req.body;
+      
+      const updatedUser = await User.findByIdAndUpdate(userId, {
+        $set: {
+          country,
+          objective,
+          carbonFootprint,
+          photoUrl
+        }
+      }, { new: true, runValidators: true });
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      const { password, resetPasswordToken, resetPasswordExpires, ...userWithoutSensitiveInfo } = updatedUser.toObject();
+      res.status(200).json(userWithoutSensitiveInfo);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error updating user profile' });
+    }
+  },
 };
 
 

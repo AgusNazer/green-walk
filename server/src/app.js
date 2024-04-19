@@ -40,6 +40,7 @@ app.use('/users', userRoutes);
 app.use('/activities', userActivity)
 // test jwt firebase
 app.use('/verifyToken', jwtTestRoute);
+app.use('/profile/:id', updateProfile)
 
 app.use((req, res, next) => {
   console.log(`Recibida solicitud: ${req.method} ${req.url}`);

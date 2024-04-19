@@ -8,8 +8,8 @@ router.post('/register', userController.register);
 // inicio de sesion ( JWT )
 // router.post('/login', userController.login);
 
-// // update user
-// router.put('/profile/update', userController.updateProfile);
+// update user
+router.put('/profile/:id', userController.updateProfile);
 
 // // change password
 // router.put('/change-password', userController.changePassword);

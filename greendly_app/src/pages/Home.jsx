@@ -10,7 +10,7 @@ import MapView, { Marker } from 'react-native-maps';
 export default function Landing() {
   const handleGetRequest = async () => {
     try {
-      const response = await axios.post('http://192.168.1.51:3002/hola',{
+      const response = await axios.post('http://192.168.1.74:3002/hola',{
         "addresLocal": "5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK",
         "accountTo": "5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE",
         "quantity": 10
