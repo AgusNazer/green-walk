@@ -43,11 +43,23 @@ export default function Login({ navigation }) {
     }
   };
 
-  const [showInputs, setShowInputs] = useState(false);
+  const [showLogIn, setShowLogIn] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
 
-  const toggleInputs = () => {
-    setShowInputs(!showInputs);
+  const toggleLogIn = () => {
+    setShowLogIn(!showLogIn);
   };
+
+  const toggleSignUp = () => {
+    setShowSignUp(!showSignUp);
+  };
+
+  const SignUp_LogIn = ()=>{
+    Alert.alert(
+      "Successfully created",
+      "Log in with your username and password",
+    )
+  }
 
   // GoogleSignin.configure({
   //   webClientId: 'project-749114756416.apps.googleusercontent.com',
@@ -77,6 +89,7 @@ export default function Login({ navigation }) {
   return (
 
     <View style={styles.container}>
+
       <Video
         source={require("../../assets/loginvideo.mp4")}
         style={styles.video}
@@ -85,16 +98,16 @@ export default function Login({ navigation }) {
         shouldPlay // Inicia la reproducción automáticamente
       />
 
-
       <View style={styles.childContainer}>
-        <View>
+
+        <View className='bg-[#0000008e] rounded-xl'>
           <Text style={styles.title}>
-            Corre por el planeta y Gana tokens eco-amigables.
+            Run around the planet and Earn eco-friendly tokens
           </Text>
         </View>
 
-        <View style={styles.form}>
-          {showInputs && (
+        {showLogIn && ( 
+          <View style={styles.form}>
             <View style={styles.formSignIn}>
 
               <View style={styles.containerLognIn}>
@@ -126,30 +139,81 @@ export default function Login({ navigation }) {
                   end={{ x: 1, y: 0 }}
                 >
                   <Text className="text-xl text-center text-gray-950 font-semibold">
-                    Sign In     
+                    Log in     
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
-          )}
-        </View>
+          </View>
+        )}
+
+        {showSignUp && (
+          <View style={styles.form} >
+            <View style={styles.formSignIn}>
+
+              <View style={styles.containerLognIn}>
+                <Text style={styles.textLognIn}>New account</Text>
+              </View>
+
+              <View style={styles.input}>
+                <TextInput
+                  onChangeText={(text) => setEmail(text)}
+                  placeholder="User_name@email.com"
+                  style={{ paddingHorizontal: 15 }}
+                />
+              </View>
+
+              <View style={styles.input}>
+                <TextInput
+                  onChangeText={(text) => setPassword(text)}
+                  placeholder="Password"
+                  style={{ paddingHorizontal: 15 }}
+                  secureTextEntry
+                />
+              </View>
+              
+              <View style={styles.input}>
+                <TextInput
+                  onChangeText={(text) => setPassword(text)}
+                  placeholder="Confirm Password"
+                  style={{ paddingHorizontal: 15 }}
+                  secureTextEntry
+                />
+              </View>
+
+              <TouchableOpacity className="items-center w-full" onPress={() => {toggleSignUp(); SignUp_LogIn();}}>
+                <LinearGradient
+                  className="py-3 rounded-full w-[100%]"
+                  colors={['#24B035', '#97E700']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                >
+                  <Text className="text-xl text-center text-gray-950 font-semibold">
+                    Sign Up     
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
 
         <View style={styles.form}>
-            <TouchableOpacity style={styles.btnLogin} onPress={toggleInputs}>
+          {!showSignUp && (
+            <TouchableOpacity style={styles.btnLogin} onPress={toggleLogIn}>
               <Text style={{ fontWeight: "600" }}>
-                {/* Sign In wiht Email and Password */}
-                {showInputs ? 'Go back' : 'Sign In with Email and Password'}
+                {showLogIn ? 'Go back' : 'Log in with Email and Password'}
               </Text>
             </TouchableOpacity>
+          )}
 
-          {!showInputs &&(
+          {(!showLogIn && !showSignUp) &&(
             <TouchableOpacity
               style={styles.btnLogin}
               // onPress={googleLogin}
               onPress={() => navigation.navigate("BottomTab")}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={{ fontWeight: "600" }}>Sign In with Google</Text>
+                <Text style={{ fontWeight: "600" }}>Log in with Google</Text>
                 <Image
                   source={require("../../assets/google.png")}
                   style={{ width: 20, height: 25, marginLeft: 10 }}
@@ -158,14 +222,13 @@ export default function Login({ navigation }) {
             </TouchableOpacity>
           )}
 
-          {!showInputs &&(
-            <TouchableOpacity className='w-full items-center pt-4'>         
-              <Text className='text-white text-base font-semibold'>
-                Create account
-              </Text>  
-            </TouchableOpacity>
+          {!showLogIn &&(
+            <TouchableOpacity style={styles.btnLogin} onPress={toggleSignUp}>
+              <Text style={{ fontWeight: "600" }}>
+              {showSignUp ? 'Go back' : 'You are new? Create an account'}
+              </Text>
+            </TouchableOpacity>          
            )}
-
         </View>
 
       </View>
@@ -199,24 +262,25 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "500",
     color: "#ffffff",
+    paddingHorizontal: 10
   },
   containerLognIn: {   
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 20,
     backgroundColor: "#ebe9e9bc",
     borderRadius: 8,
     width: '60%',
     alignSelf: "center",
-    paddingVertical: 5,
+    paddingVertical: 8,
   },
   textLognIn: { 
     fontSize: 20,
     fontWeight: '500',
-    color: "black"
+    color: "black",
   },
   form: {
     width: "90%",
@@ -224,7 +288,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: 10,
-    backgroundColor: "white",
+    backgroundColor: "#E4E4E4",
     borderRadius: 30,
   },
   formSignIn: {
@@ -252,7 +316,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     bottom: 0,
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     borderRadius: 30,
     borderWidth: 1,
     borderColor: "#000",
