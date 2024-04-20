@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import CustomText from './CustomText';
 
 export default function CardsHome(props) {
   const { toggleInputs } = props;
@@ -22,9 +23,9 @@ export default function CardsHome(props) {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
-              <Text className="text-xl text-center text-gray-950 font-semibold">
+              <CustomText className="text-xl text-center text-gray-950 font-semibold">
                 I'm Ready!    
-              </Text>
+              </CustomText>
             </LinearGradient>
            
           </TouchableOpacity>
