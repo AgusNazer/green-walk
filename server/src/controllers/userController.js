@@ -80,7 +80,7 @@ const userController = {
             uid: uid,
             email: email,
             username: username,
-            password: '' // Como es con Firebase, puedes optar por no almacenar contraseña
+            password: '' // Como es con Firebase, podemos optar por no almacenar nada aca
         });
         const savedUser = await newUser.save();
         
