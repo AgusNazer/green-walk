@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, BackHandler, ToastAndroid } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, BackHandler, ToastAndroid, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline  } from 'react-native-maps';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import themes from '../themeMap';
+import CardsHome from '../components/CardsHome';
 
 const { themeDark, themeLight } = themes;
 
@@ -49,11 +50,7 @@ export default function Home() {
   const [timeoutId, setTimeoutId] = useState(null);
   const [dark, setDark] = useState(false);
   const [locationLoaded, setLocationLoaded] = useState(false);
-
-  // const longitude = location.coords.longitude;
-  // const latitude = location.coords.latitude;
-
-  console.log(location,)
+  const [iamReady, setIamReady] = useState(false)
 
   useEffect(() => {
     const backAction = () => {
@@ -179,113 +176,120 @@ export default function Home() {
 
   const customMapStyle = dark ? themeDark : themeLight;
 
-  return (
-    <View style={styles.container}>
+  const toggleInputs = () => {
+    setIamReady(!iamReady);
+  };
 
-      {locationLoaded && location ? (
-        <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: location ? location.coords.latitude : 0,
-          longitude: location ? location.coords.longitude : 0,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-        showsUserLocation={true}      
-        zoomControlEnabled={true}
-        zoomEnabled={true}
-        showsBuildings={true}
-        customMapStyle={customMapStyle}
-      >
-        {locations.length > 0 && (
-          <>
-            <Polyline
-              coordinates={locations.map(loc => ({
-                latitude: loc.latitude,
-                longitude: loc.longitude,
-              }))}
-              strokeWidth={4}
-              strokeColor="#3AA940"
-            />
-            <Marker
-              coordinate={{
-                latitude: locations[0].latitude,
-                longitude: locations[0].longitude,
-              }}
-              title="Inicio"
-              description="Inicio del recorrido"
-              pinColor="#1D57CB"
-            />
-            {locations.length > 1 && (
+  return (
+    <>
+      {!iamReady && (    
+        <CardsHome toggleInputs={toggleInputs} />    
+      )}     
+   
+      <View style={styles.container}>
+
+        {locationLoaded && location ? (
+          <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: location ? location.coords.latitude : 0,
+            longitude: location ? location.coords.longitude : 0,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          showsUserLocation={true}      
+          zoomControlEnabled={true}
+          zoomEnabled={true}
+          showsBuildings={true}
+          customMapStyle={customMapStyle}
+        >
+          {locations.length > 0 && (
+            <>
+              <Polyline
+                coordinates={locations.map(loc => ({
+                  latitude: loc.latitude,
+                  longitude: loc.longitude,
+                }))}
+                strokeWidth={4}
+                strokeColor="#3AA940"
+              />
               <Marker
                 coordinate={{
-                  latitude: locations[locations.length - 1].latitude,
-                  longitude: locations[locations.length - 1].longitude,
+                  latitude: locations[0].latitude,
+                  longitude: locations[0].longitude,
                 }}
-                title="Fin"
-                description="Fin del recorrido"
-                pinColor="red"
+                title="Inicio"
+                description="Inicio del recorrido"
+                pinColor="#1D57CB"
               />
-            )}
-          </>
-        )}
-      </MapView>
-      ) : (
-        <Text>Cargando ubicación...</Text>
-      )}            
+              {locations.length > 1 && (
+                <Marker
+                  coordinate={{
+                    latitude: locations[locations.length - 1].latitude,
+                    longitude: locations[locations.length - 1].longitude,
+                  }}
+                  title="Fin"
+                  description="Fin del recorrido"
+                  pinColor="red"
+                />
+              )}
+            </>
+          )}
+        </MapView>
+        ) : (
+          <Text>Cargando ubicación...</Text>
+        )}            
 
-      <TouchableOpacity
-        onPress={() => setDark((prevDark) => !prevDark)}
-        style={{
-          backgroundColor: "#FFF",
-          height: 30,
-          borderRadius: 15,
-          width: 30,
-          alignItems: "center",
-          justifyContent: "center",
-          position: "absolute",
-          marginTop: 70,
-          alignSelf: "flex-end",
-          right: 15,
-        }}
-      >
-        <FontAwesome name="adjust" size={30} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setDark((prevDark) => !prevDark)}
+          style={{
+            backgroundColor: "#FFF",
+            height: 30,
+            borderRadius: 15,
+            width: 30,
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+            marginTop: 70,
+            alignSelf: "flex-end",
+            right: 15,
+          }}
+        >
+          <FontAwesome name="adjust" size={30} />
+        </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={[styles.button, isRecording ? styles.finishButton : styles.startButton]}
-        onPress={isRecording ? handleStopRecording : handleStartRecording}
-      >
-        <Text style={styles.buttonText}>
-          {isRecording ? 'FINISH' : 'START'}
-        </Text>
-      </TouchableOpacity>
-
-      <View className="flex flex-row justify-evenly mb-4" >
-        <View className="flex flex-col justify-center items-center" >
-          <Text style={styles.distanceText}>
-            {(totalDistance / 1000).toFixed(2) + ' Km'}
+        <TouchableOpacity 
+          style={[styles.button, isRecording ? styles.finishButton : styles.startButton]}
+          onPress={isRecording ? handleStopRecording : handleStartRecording}
+        >
+          <Text style={styles.buttonText}>
+            {isRecording ? 'FINISH' : 'START'}
           </Text>
+        </TouchableOpacity>
 
-          <Text className="">
-            Distance
-          </Text>
-        </View>
+        <View className="flex flex-row justify-evenly mb-4" >
+          <View className="flex flex-col justify-center items-center" >
+            <Text style={styles.distanceText}>
+              {(totalDistance / 1000).toFixed(2) + ' Km'}
+            </Text>
 
-        <View className="flex flex-col justify-center items-center">
-          <Text style={styles.timeText}>
-            {formatTime(elapsedTime)}
-          </Text>
+            <Text className="">
+              Distance
+            </Text>
+          </View>
 
-          <Text className="" >
-            Time
-          </Text>
+          <View className="flex flex-col justify-center items-center">
+            <Text style={styles.timeText}>
+              {formatTime(elapsedTime)}
+            </Text>
+
+            <Text className="" >
+              Time
+            </Text>
+          </View>
         </View>
       </View>
-
-     
-
-    </View>
+    </>
   );
 }
 
