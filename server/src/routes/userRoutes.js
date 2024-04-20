@@ -23,7 +23,10 @@ router.put('/profile/:id', userController.updateProfile);
 // // reset password
 // router.post('/reset-password', userController.resetPassword);
 
-// // info profile
+//get user
+router.get('/getAllUsers', userController.getAllUsers);
+
+// info profile
 // router.get('/profile', userController.getProfile);
 
 // // delete user

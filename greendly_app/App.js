@@ -23,13 +23,13 @@ const fetchFonts = () => {
 
 export default function App() {
   
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
 
-  if (!dataLoaded) {
+  if (!fontLoaded) {
     return (
       <AppLoading
         startAsync={fetchFonts}
-        onFinish={() => setDataLoaded(true)}
+        onFinish={() => setFontLoaded(true)}
         onError={console.warn}
       />
     );
