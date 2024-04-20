@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import CustomText from './CustomText';
 
 export default function CardsHome(props) {
   const { toggleInputs } = props;
@@ -22,16 +23,16 @@ export default function CardsHome(props) {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
-              <Text className="text-xl text-center text-gray-950 font-semibold">
+              <CustomText className="text-xl text-center text-gray-950 font-semibold">
                 I'm Ready!    
-              </Text>
+              </CustomText>
             </LinearGradient>
            
           </TouchableOpacity>
 
-          <Text className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[74%]'>
+          <CustomText className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[74%]'>
             Are you ready to start walking and earning tokens?
-          </Text>
+          </CustomText>
         </View>
 
 
@@ -48,15 +49,15 @@ export default function CardsHome(props) {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
-              <Text className="text-xl text-center text-gray-950 font-semibold">
+              <CustomText className="text-xl text-center text-gray-950 font-semibold">
                 Pet friendly
-              </Text>
+              </CustomText>
             </LinearGradient>
           </TouchableOpacity>
 
-          <Text className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[65%]'>
+          <CustomText className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[65%]'>
             Earn tokens while walking your pet
-          </Text>
+          </CustomText>
         </View>
 
 
@@ -74,15 +75,15 @@ export default function CardsHome(props) {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
-              <Text className="text-xl text-center text-gray-950 font-semibold">
+              <CustomText className="text-xl text-center text-gray-950 font-semibold">
                 Challenges
-              </Text>
+              </CustomText>
             </LinearGradient>
           </TouchableOpacity>
 
-          <Text className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[70%]'>
+          <CustomText className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[70%]'>
             Claim your token and prizes obtained
-          </Text>
+          </CustomText>
         </View>
 
 
@@ -106,9 +107,9 @@ export default function CardsHome(props) {
            
           </TouchableOpacity>
 
-          <Text className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[74%]'>
+          <CustomText className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[74%]'>
             Are you ready to start walking and earning tokens?
-          </Text>
+          </CustomText>
         </View>
 
       </ScrollView>

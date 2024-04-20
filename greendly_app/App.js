@@ -4,8 +4,37 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomTab from "./src/navigation/BottomTab";
 import Login from "./src/pages/Login";
+import { Text } from "react-native";
+import Settings from "./src/pages/Settings";
+import {useState, useEffect} from "react"
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    // 'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    // 'Roboto-Light': require('./assets/fonts/Roboto-Light.ttf'),
+    'jersey-25': require('./assets/fonts/Jersey25-Regular.ttf'),
+  });
+};
+
+
 
 export default function App() {
+  
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  if (!fontLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setFontLoaded(true)}
+        onError={console.warn}
+      />
+    );
+  }
+
   const Stack = createStackNavigator();
 
   function MyStack() {
@@ -25,6 +54,16 @@ export default function App() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{ 
+          // Aquí puedes establecer las opciones para la pantalla Settings
+          // Por ejemplo, si quieres mostrar la cabecera:
+          headerShown: true,
+          title: 'Configuración' // Esto es opcional, puedes personalizar el título
+        }}
+      />
       </Stack.Navigator>
     );
   }
@@ -36,6 +75,7 @@ export default function App() {
         <StatusBar style="auto" />
       </NavigationContainer>
     </View>
+    
   );
 }
 

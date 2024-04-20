@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  wallet: {
+    type: String,
+    required: true,
+    default: null,
+  },
   activities: [{
     date: Date,
     duration: Number,

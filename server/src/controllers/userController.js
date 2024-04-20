@@ -1,4 +1,8 @@
-const User = require('../models/User');
+const User = require("../models/User");
+
+// Obtener usuarios de la db
+
+
 
 //  post controller crear usuario
 const userController = {
@@ -10,28 +14,35 @@ const userController = {
       // Buscar si ya existe un usuario con el mismo email
       const existingUser = await User.findOne({ email: newUser.email });
       if (existingUser) {
-        return res.status(400).json({ message: 'This email already exists.' });
+        return res.status(400).json({ message: "This email already exists." });
       }
-     
+
       // Guardar el nuevo usuario en la base de datos
       const savedUser = await newUser.save();
 
       // Excluir datos sensibles antes de enviar la respuesta
-      const { password, resetPasswordToken, resetPasswordExpires, ...userWithoutPassword } = savedUser.toObject();
+      const {
+        password,
+        resetPasswordToken,
+        resetPasswordExpires,
+        ...userWithoutPassword
+      } = savedUser.toObject();
       res.status(201).json(userWithoutPassword);
     } catch (error) {
       console.error(error);
-      if (error.name === 'ValidationError') {
+      if (error.name === "ValidationError") {
         let errors = {};
-        Object.keys(error.errors).forEach(key => {
+        Object.keys(error.errors).forEach((key) => {
           errors[key] = error.errors[key].message;
         });
         return res.status(400).json(errors);
       }
-      if (error.name === 'MongoServerError') {
-        return res.status(500).json({ message: 'Error connection with Db.' });
+      if (error.name === "MongoServerError") {
+        return res.status(500).json({ message: "Error connection with Db." });
       }
-      return res.status(500).json({ message: 'Something went wrong registering a user' });
+      return res
+        .status(500)
+        .json({ message: "Something went wrong registering a user" });
     }
   },
 
@@ -40,62 +51,87 @@ const userController = {
     try {
       const userId = req.params.id;
       const { country, objective, carbonFootprint, photoUrl } = req.body;
-      
-      const updatedUser = await User.findByIdAndUpdate(userId, {
-        $set: {
-          country,
-          objective,
-          carbonFootprint,
-          photoUrl,
-          
-        }
-      }, { new: true, runValidators: true });
-      
+
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          $set: {
+            country,
+            objective,
+            carbonFootprint,
+            photoUrl,
+          },
+        },
+        { new: true, runValidators: true }
+      );
+
       if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: "User not found" });
       }
-      
-      const { password, resetPasswordToken, resetPasswordExpires, ...userWithoutSensitiveInfo } = updatedUser.toObject();
+
+      const {
+        password,
+        resetPasswordToken,
+        resetPasswordExpires,
+        ...userWithoutSensitiveInfo
+      } = updatedUser.toObject();
       res.status(200).json(userWithoutSensitiveInfo);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error updating use r profile' });
+      res.status(500).json({ message: "Error updating use r profile" });
     }
   },
 
   // save user de firabse
   async saveUser(req, res) {
     try {
-        const { uid, email } = req.body;
-        const username = email.split('@')[0]; // Genera un username a partir del email
+      const { uid, email } = req.body;
+      const username = email.split("@")[0]; // Genera un username a partir del email
 
-        // Verifica si el usuario ya existe para evitar duplicados
-        const existingUser = await User.findOne({ uid: uid });
-        if (existingUser) {
-            return res.status(409).json({ message: 'User already exists.' });
-        }
+      // Validación simple del email
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        return res.status(400).json({ message: "Invalid email format." });
+      }
 
-        // Crear y guardar el nuevo usuario
-        const newUser = new User({
-            uid: uid,
-            email: email,
-            username: username,
-            password: '' // Como es con Firebase, puedes optar por no almacenar contraseña
-        });
-        const savedUser = await newUser.save();
-        
+      // Verifica si el usuario ya existe para evitar duplicados
+      const existingUser = await User.findOne({ uid: uid });
+      if (existingUser) {
+        return res.status(409).json({ message: "User already exists." });
+      }
 
-        // Excluir datos sensibles antes de enviar la respuesta
-        const { password, ...userWithoutPassword } = savedUser.toObject();
-        res.status(201).json(userWithoutPassword);
+      // Crear y guardar el nuevo usuario
+      const newUser = new User({
+        uid: uid,
+        email: email,
+        username: username,
+        password: "", // Como es con Firebase, podemos optar por no almacenar nada aca
+      });
+      const savedUser = await newUser.save();
+
+      // Excluir datos sensibles antes de enviar la respuesta
+      const { password, ...userWithoutPassword } = savedUser.toObject();
+      res.status(201).json(userWithoutPassword);
     } catch (error) {
-        console.error('Failed to save user', error);
-        res.status(500).json({ message: 'Error saving user' });
+      console.error("Failed to save user", error);
+      res.status(500).json({ message: "Error saving user" });
     }
-}
+  },
 
+  //get users db
+  async getAllUsers(req, res) {
+    try {
+        const users = await User.find({});
+        const usersWithFilteredFields = users.map(user => {
+            const { password, resetPasswordToken, resetPasswordExpires, ...userWithoutSensitiveInfo } = user.toObject();
+            return userWithoutSensitiveInfo;
+        });
+        res.status(200).json(usersWithFilteredFields);
+    } catch (error) {
+        console.error("Error retrieving users:", error);
+        res.status(500).json({ message: "Error retrieving users from database" });
+    }
+  },
 
-   
 };
 
 module.exports = userController;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, Alert,} from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, TextInput, Alert,} from "react-native";
 import appfirebase from "../../firebase";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -7,6 +7,8 @@ import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from "firebas
 import { Video } from 'expo-av'
 import axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
+import CustomText from "../components/CustomText";
+
 
 
 const auth = getAuth(appfirebase);
@@ -39,7 +41,7 @@ export default function Login({ navigation }) {
       });
       console.log('User saved in MongoDB:', response.data);
     } catch (error) {
-      console.error('Failed to save user in MongoDB', error);
+      console.log('Failed to save user in MongoDB', error);
     }
   };
 
@@ -101,9 +103,9 @@ export default function Login({ navigation }) {
       <View style={styles.childContainer}>
 
         <View className='bg-[#0000008e] rounded-xl'>
-          <Text style={styles.title}>
+          <CustomText style={styles.title}>
             Run around the planet and Earn eco-friendly tokens
-          </Text>
+          </CustomText>
         </View>
 
         {showLogIn && ( 
@@ -138,9 +140,9 @@ export default function Login({ navigation }) {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                 >
-                  <Text className="text-xl text-center text-gray-950 font-semibold">
+                  <CustomText className="text-xl text-center text-gray-950 font-semibold">
                     Log in     
-                  </Text>
+                  </CustomText>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
@@ -152,7 +154,7 @@ export default function Login({ navigation }) {
             <View style={styles.formSignIn}>
 
               <View style={styles.containerLognIn}>
-                <Text style={styles.textLognIn}>New account</Text>
+                <CustomText style={styles.textLognIn}>New account</CustomText>
               </View>
 
               <View style={styles.input}>
@@ -188,9 +190,9 @@ export default function Login({ navigation }) {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                 >
-                  <Text className="text-xl text-center text-gray-950 font-semibold">
+                  <CustomText className="text-xl text-center text-gray-950 font-semibold">
                     Sign Up     
-                  </Text>
+                  </CustomText>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
@@ -200,9 +202,9 @@ export default function Login({ navigation }) {
         <View style={styles.form}>
           {!showSignUp && (
             <TouchableOpacity style={styles.btnLogin} onPress={toggleLogIn}>
-              <Text style={{ fontWeight: "600" }}>
+              <CustomText style={{ fontWeight: "600" }}>
                 {showLogIn ? 'Go back' : 'Log in with Email and Password'}
-              </Text>
+              </CustomText>
             </TouchableOpacity>
           )}
 
@@ -213,7 +215,7 @@ export default function Login({ navigation }) {
               onPress={() => navigation.navigate("BottomTab")}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={{ fontWeight: "600" }}>Log in with Google</Text>
+                <CustomText style={{ fontWeight: "600" }}>Log in with Google</CustomText>
                 <Image
                   source={require("../../assets/google.png")}
                   style={{ width: 20, height: 25, marginLeft: 10 }}
@@ -224,9 +226,9 @@ export default function Login({ navigation }) {
 
           {!showLogIn &&(
             <TouchableOpacity style={styles.btnLogin} onPress={toggleSignUp}>
-              <Text style={{ fontWeight: "600" }}>
+              <CustomText style={{ fontWeight: "600" }}>
               {showSignUp ? 'Go back' : 'You are new? Create an account'}
-              </Text>
+              </CustomText>
             </TouchableOpacity>          
            )}
         </View>
