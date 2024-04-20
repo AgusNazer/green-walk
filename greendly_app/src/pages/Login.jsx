@@ -113,7 +113,7 @@ export default function Login({ navigation }) {
             <View style={styles.formSignIn}>
 
               <View style={styles.containerLognIn}>
-                <Text style={styles.textLognIn}>Login</Text>
+                <CustomText style={styles.textLognIn}>Login</CustomText>
               </View>
 
               <View style={styles.input}>
