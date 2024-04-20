@@ -39,7 +39,7 @@ export default function Login({ navigation }) {
       });
       console.log('User saved in MongoDB:', response.data);
     } catch (error) {
-      console.error('Failed to save user in MongoDB', error);
+      console.log('Failed to save user in MongoDB', error);
     }
   };
 

@@ -6,6 +6,7 @@ import MapView, { Marker, Polyline  } from 'react-native-maps';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import themes from '../themeMap';
 import CardsHome from '../components/CardsHome';
+import CustomText from '../components/CustomText';
 
 const { themeDark, themeLight } = themes;
 

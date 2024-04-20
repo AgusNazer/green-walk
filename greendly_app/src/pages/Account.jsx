@@ -12,10 +12,11 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
+import { Auth, getAuth } from "firebase/auth";
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({
-    name: "Agus",
+    name: '',
     country: "Argentina",
     objetivo: "Reducir la huella de carbono en un 15% este año",
     tokensEarned: "1500",
@@ -25,6 +26,8 @@ export default function UserProfile() {
 
   const [userId, setUserId] = useState(null);
   const [editableField, setEditableField] = useState(""); // Estado para controlar el campo editable
+  const auth = getAuth();
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
 
   const handleUpdateProfile = async () => {
     if (!userId) {
@@ -92,7 +95,7 @@ export default function UserProfile() {
           </View>
         </View>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 8 }}>
-          {userInfo.name}
+          {userEmail}
         </Text>
         <Text style={{ fontSize: 14, color: "#666", marginTop: 4 }}>
           País: {userInfo.country}
