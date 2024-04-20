@@ -1,21 +1,45 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, Alert,} from "react-native";
 import appfirebase from "../../firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+// import * as Google from 'expo-auth-session/providers/google';
 import { Video } from 'expo-av'
+import axios from "axios";
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const auth = getAuth(appfirebase);
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const LoginWUP = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const useCredential = await signInWithEmailAndPassword(auth, email, password);
+      const { uid, email: userEmail } = useCredential.user;
+
+      // Guarda el usuario en la base de datos de MongoDB
+      await saveUserInMongoDB(uid, userEmail);
+
       navigation.navigate("BottomTab");
     } catch (error) {
       Alert.alert("Error", "Usuario o contraseña incorrecto");
       console.log(error);
+    }
+  };
+
+
+  // Función para guardar el usuario en MongoDB
+  const saveUserInMongoDB = async (uid, email) => {
+    try {
+      const response = await axios.post('http://192.168.1.74:3002/users/saveUser', {
+        uid,
+        email
+      });
+      console.log('User saved in MongoDB:', response.data);
+    } catch (error) {
+      console.error('Failed to save user in MongoDB', error);
     }
   };
 
@@ -25,15 +49,41 @@ export default function Login({ navigation }) {
     setShowInputs(!showInputs);
   };
 
+  // GoogleSignin.configure({
+  //   webClientId: 'project-749114756416.apps.googleusercontent.com',
+  // });
+
+  // const googleLogin = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
+  //     const { idToken } = userInfo;
+  //     const googleCredential = GoogleAuthProvider.credential(idToken);
+  
+  //     // Autenticación con Firebase usando las credenciales de Google
+  //     const auth = getAuth();
+  //     await signInWithCredential(auth, googleCredential);
+  
+  //     // Aquí podrías llamar a `saveUserInMongoDB` con la información del usuario si es necesario
+  
+  //     // Si todo es exitoso, redirige al usuario a la pantalla "BottomTab"
+  //     navigation.navigate("BottomTab");
+  //   } catch (error) {
+  //     Alert.alert("Login Failed", error.message);
+  //     console.error(error);
+  //   }
+  // };
+
   return (
+
     <View style={styles.container}>
-<Video
-  source={require("../../assets/loginvideo.mp4")}
-  style={styles.video}
-  resizeMode="cover"
-  isLooping={true} // Utiliza isLooping en lugar de repeat
-  shouldPlay // Inicia la reproducción automáticamente
-/>
+      <Video
+        source={require("../../assets/loginvideo.mp4")}
+        style={styles.video}
+        resizeMode="cover"
+        isLooping={true} // Utiliza isLooping en lugar de repeat
+        shouldPlay // Inicia la reproducción automáticamente
+      />
 
 
       <View style={styles.childContainer}>
@@ -68,33 +118,56 @@ export default function Login({ navigation }) {
                 />
               </View>
 
-              <TouchableOpacity style={styles.btnSigIn} onPress={LoginWUP}>
-                <Text style={{ fontWeight: "600" }}>Sign In</Text>
+              <TouchableOpacity className="items-center w-full" onPress={LoginWUP}>
+                <LinearGradient
+                  className="py-3 rounded-full w-[100%]"
+                  colors={['#24B035', '#97E700']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                >
+                  <Text className="text-xl text-center text-gray-950 font-semibold">
+                    Sign In     
+                  </Text>
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           )}
         </View>
 
         <View style={styles.form}>
-          <TouchableOpacity style={styles.btnLogin} onPress={toggleInputs}>
-            <Text style={{ fontWeight: "600" }}>
-              Sign In wiht Email and Password
-            </Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.btnLogin} onPress={toggleInputs}>
+              <Text style={{ fontWeight: "600" }}>
+                {/* Sign In wiht Email and Password */}
+                {showInputs ? 'Go back' : 'Sign In with Email and Password'}
+              </Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.btnLogin}
-            onPress={() => navigation.navigate("BottomTab")}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text style={{ fontWeight: "600" }}>Sign In with Google</Text>
-              <Image
-                source={require("../../assets/google.png")}
-                style={{ width: 20, height: 25, marginLeft: 10 }}
-              />
-            </View>
-          </TouchableOpacity>
+          {!showInputs &&(
+            <TouchableOpacity
+              style={styles.btnLogin}
+              // onPress={googleLogin}
+              onPress={() => navigation.navigate("BottomTab")}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ fontWeight: "600" }}>Sign In with Google</Text>
+                <Image
+                  source={require("../../assets/google.png")}
+                  style={{ width: 20, height: 25, marginLeft: 10 }}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+
+          {!showInputs &&(
+            <TouchableOpacity className='w-full items-center pt-4'>         
+              <Text className='text-white text-base font-semibold'>
+                Create account
+              </Text>  
+            </TouchableOpacity>
+           )}
+
         </View>
+
       </View>
     </View>
   );
@@ -108,11 +181,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   video: {
+    flex: 1,
     position: "absolute",
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
+    resizeMode: "cover",
   },
   childContainer: {
     flex: 1,
@@ -120,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingTop: 150,
-    paddingBottom: 80,
+    paddingBottom: 50,
   },
   title: {
     textAlign: "center",
@@ -131,9 +206,9 @@ const styles = StyleSheet.create({
   containerLognIn: {   
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 5,
-    backgroundColor: "#ebe9e97c",
-    borderRadius: 30,
+    marginBottom: 10,
+    backgroundColor: "#ebe9e9bc",
+    borderRadius: 8,
     width: '60%',
     alignSelf: "center",
     paddingVertical: 5,

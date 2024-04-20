@@ -3,40 +3,51 @@ import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios'
 import {Notifications} from 'expo'
 import * as Permissions from 'expo-permissions'
+import sendNotificaiont from "../components/CardsRewards/SendNotification";
 
 import CardReward from '../components/CardsRewards/CardReward'
 
-export default function Rewards() {
+const getToken = async ()=>{
+  const {status} = await Permissions.getAsync(Permissions.NOTIFICATIONS)
+  if(status !== "granted"){
+    return
+  }
+  const token = await Notifications.getExpoPushTokenAsync()
+  console.log(token);
+  return token
+}
 
-  const handleGetRequest = async () => {
-    try {
-      const response = await axios.post('http://192.168.0.51:3002/hola',{
-        "addresLocal": "5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK",
-        "accountTo": "5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE",
-        "quantity": 10
-      });
-      Alert.alert('Respuesta:', JSON.stringify(response.data));
-    } catch (error) {
-      Alert.alert('Error:', error.message);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity 
-        style={styles.contButton}
-      >
-        <Text style={styles.buttonText}>
-          Make GET Request 
-        </Text>
-      </TouchableOpacity>
-
-      <View className="items-center justify-start">
-        <CardReward/>
-        
+const handleGetRequest = async () => {
+  try {
+    const response = await axios.post('http://192.168.1.51:3002/claim',{
+      "addresLocal": "5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE",
+       "id": "1",
+       "name": "Nicolas",
+       "km_travelled": "12",
+       "time": "14",
+       "city": "Cartagena",
+       "date": "2024-12-24",
+       "tokens":12
+   });
+    Alert.alert('Respuesta:', JSON.stringify(response.data));
+  } catch (error) {
+    Alert.alert('Error:', error.message);
+  }
+};
+export default class Rewards extends React.Component {
+  componentDidMount(){
+    getToken()
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <View className="items-center justify-start">
+          <CardReward claim={handleGetRequest}/>
+          
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({

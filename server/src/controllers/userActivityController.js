@@ -21,7 +21,8 @@ const userActivityController = {
       res.status(500).json({ message: "Something went wrong", error: error.message });
     }
   },
-
+  
 };
+
 
 module.exports = userActivityController;

@@ -5,11 +5,14 @@ const userController = require('../controllers/userController');
 // registro de usuario
 router.post('/register', userController.register);
 
+router.post('/saveUser', userController.saveUser);
+
+
 // inicio de sesion ( JWT )
 // router.post('/login', userController.login);
 
-// // update user
-// router.put('/profile/update', userController.updateProfile);
+// update user
+router.put('/profile/:id', userController.updateProfile);
 
 // // change password
 // router.put('/change-password', userController.changePassword);

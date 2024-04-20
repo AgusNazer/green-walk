@@ -2,10 +2,8 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity,Alert } from 'react-native';
 import NativeWind from 'nativewind';
 
-const Card = () => {
-    const test = ()=>{
-        Alert.alert("Hola")
-    }
+const Card = ({claim}) => {
+
   return (
     <View className="relative flex-1 flex-col mt-6 text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-96 ">
       <View className="relative h-56 mt-2 mx-4  overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500 shadow-blue-gray-500/40">
@@ -24,7 +22,7 @@ const Card = () => {
         </Text>
       </View>
       <View className="p-6 pt-0">
-        <TouchableOpacity onPress={test} className="align-middle w-full select-none font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none">
+        <TouchableOpacity onPress={claim} className="align-middle w-full select-none font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none">
 
           <Text className="text-xs text-center py-3 px-6 text-white">
             Claim Tokens
