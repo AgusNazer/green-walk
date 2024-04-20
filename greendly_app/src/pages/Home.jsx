@@ -5,7 +5,7 @@ import * as Location from 'expo-location';
 import MapView, { Marker, Polyline  } from 'react-native-maps';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import themes from '../themeMap';
-import HomeReady from '../components/HomeReady';
+import CardsHome from '../components/CardsHome';
 
 const { themeDark, themeLight } = themes;
 
@@ -183,7 +183,7 @@ export default function Home() {
   return (
     <>
       {!iamReady && (    
-        <HomeReady toggleInputs={toggleInputs} />    
+        <CardsHome toggleInputs={toggleInputs} />    
       )}     
    
       <View style={styles.container}>
@@ -288,8 +288,7 @@ export default function Home() {
             </Text>
           </View>
         </View>
-      </View>  
-
+      </View>
     </>
   );
 }
