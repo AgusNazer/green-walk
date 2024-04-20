@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { getAuth, signOut } from "firebase/auth";
+import CustomText from '../components/CustomText';
 
 const Settings = ({ navigation }) => {
   const auth = getAuth();
@@ -19,26 +20,26 @@ const Settings = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Configuración</Text>
+      <CustomText style={styles.title}>Configuración</CustomText>
       
-      <Text style={styles.sectionHeader}>Información de la Cuenta</Text>
-      <Text style={styles.sectionContent}>{userEmail}</Text>
+      <CustomText style={styles.sectionHeader}>Información de la Cuenta</CustomText>
+      <CustomText style={styles.sectionContent}>{userEmail}</CustomText>
       
-      <Text style={styles.sectionHeader}>Preferencias de Notificaciones</Text>
+      <CustomText style={styles.sectionHeader}>Preferencias de Notificaciones</CustomText>
       <TouchableOpacity style={styles.buttonSmall}>
-        <Text style={styles.buttonText}>Configurar Notificaciones</Text>
+        <CustomText style={styles.buttonCustomText}>Configurar Notificaciones</CustomText>
       </TouchableOpacity>
       
-      <Text style={styles.sectionHeader}>Privacidad y Seguridad</Text>
+      <CustomText style={styles.sectionHeader}>Privacidad y Seguridad</CustomText>
       <TouchableOpacity style={styles.buttonSmall}>
-        <Text style={styles.buttonText}>Gestionar Privacidad</Text>
+        <CustomText style={styles.buttonCustomText}>Gestionar Privacidad</CustomText>
       </TouchableOpacity>
 
-      <Text style={styles.sectionHeader}>Acerca de Greenly</Text>
-      <Text style={styles.sectionContent}>Versión 1.0.1 - Conectando tus pasos a un mundo mejor.</Text>
+      <CustomText style={styles.sectionHeader}>Acerca de Greenly</CustomText>
+      <CustomText style={styles.sectionContent}>Versión 1.0.1 - Conectando tus pasos a un mundo mejor.</CustomText>
       
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
-        <Text style={styles.buttonText}>Cerrar Sesión</Text>
+        <CustomText style={styles.buttonCustomText}>Cerrar Sesión</CustomText>
       </TouchableOpacity>
     </View>
   );
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
   },
-  buttonText: {
+  buttonCustomText: {
     color: '#ffffff',
     fontWeight: 'bold',
   }
