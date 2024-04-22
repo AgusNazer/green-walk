@@ -34,13 +34,14 @@ export default function Login({ navigation }) {
   };
   
   // Función para guardar el usuario en MongoDB
-  const saveUserInMongoDB = async (uid, email) => {
+  const saveUserInMongoDB = async (uid, email,username) => {
     try {
-      const response = await axios.post(`${API_URL}/users/saveUser`, {
+       await axios.post(`${API_URL}/users/register`, {
         uid,
-        email
+        email,
+        username
       });
-      console.log('User saved in MongoDB:', response.data);
+      console.log('User saved in MongoDB:');
     } catch (error) {
       console.log('Failed to save user in MongoDB', error);
     }
@@ -68,7 +69,7 @@ export default function Login({ navigation }) {
       const user = userCredential.user;
   
 
-      await saveUserInMongoDB(user.uid, user.email);
+     await saveUserInMongoDB(user.uid, user.email ,user.email);
   
       Alert.alert("Registration Successful", "You may now log in with your credentials.");
       setEmail('');
