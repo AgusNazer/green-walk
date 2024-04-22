@@ -10,7 +10,7 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
+    required: false,
     unique: true,
   },
   email: {
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   },
   wallet: {
     type: String,
-    required: true,
+    required: false,
     default: null,
   },
   activities: [{
