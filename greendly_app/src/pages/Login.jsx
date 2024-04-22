@@ -9,8 +9,7 @@ import axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomText from "../components/CustomText";
 import { API_URL } from '@env';
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth = getAuth(appfirebase);
 export default function Login({ navigation }) {
@@ -18,23 +17,20 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-
   const LoginWUP = async () => {
     try {
       const useCredential = await signInWithEmailAndPassword(auth, email, password);
-      const { uid, email: userEmail } = useCredential.user;
+      const {email: userEmail } = useCredential.user;
 
-      // Guarda el usuario en la base de datos de MongoDB
-      await saveUserInMongoDB(uid, userEmail);
-
+      await AsyncStorage.setItem('email', `${userEmail}`) 
+   
       navigation.navigate("BottomTab");
     } catch (error) {
       Alert.alert("Error", "Usuario o contraseña incorrecto");
       console.log(error);
     }
   };
-
-
+  
   // Función para guardar el usuario en MongoDB
   const saveUserInMongoDB = async (uid, email) => {
     try {

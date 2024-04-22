@@ -7,6 +7,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import themes from '../themeMap';
 import CardsHome from '../components/CardsHome';
 import CustomText from '../components/CustomText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { themeDark, themeLight } = themes;
 
@@ -180,6 +181,16 @@ export default function Home() {
   const toggleInputs = () => {
     setIamReady(!iamReady);
   };
+  
+  // funcion para almacenar email de usaurio logeado en "LocalStorage"
+  const [emailStorage, setEmailStorage] = useState('')
+
+  const getData = async () => {
+    const value = await AsyncStorage.getItem('email');
+    setEmailStorage(value)
+    // console.log(emailStorage)   
+  };    
+  getData();
 
   return (
     <>
