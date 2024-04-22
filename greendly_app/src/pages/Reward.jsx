@@ -2,8 +2,8 @@ import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios'
 import {Notifications} from 'expo'
-import * as Permissions from 'expo-permissions'
-import sendNotificaiont from "../components/CardsRewards/SendNotification";
+import { API_URL } from '@env';
+
 
 import CardReward from '../components/CardsRewards/CardReward'
 
@@ -19,7 +19,7 @@ const getToken = async ()=>{
 
 const handleGetRequest = async () => {
   try {
-    const response = await axios.post('http://192.168.1.51:3002/claim',{
+    const response = await axios.post(`${API_URL}/claim`,{
       "addresLocal": "5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE",
        "id": "1",
        "name": "Nicolas",

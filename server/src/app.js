@@ -7,7 +7,7 @@ const userRoutes = require('./routes/userRoutes.js');
 // test de firebase jwt
 // require('./services/firebaseAdminConfig.js');
 // const jwtTestRoute = require('./routes/jwtTestRoute.js')
-const {GearApi , ProgramMetadata , GearKeyring , decodeAddress} = require('@gear-js/api')
+const {GearApi , ProgramMetadata , GearKeyring , decodeAddress,encodeAddress} = require('@gear-js/api')
 const bodyParser = require('body-parser');
 
 
@@ -177,6 +177,53 @@ try {
 
 
 })
+
+app.get('/balance/:id', async (req, res) => {
+  const wallet = req.params.id;
+  try {
+    const gearApi = await GearApi.create({ providerAddress: 'wss://testnet.vara-network.io' });
+    let balance = 0;
+    let fullState = {};
+
+
+  const programIDFT = process.env.TOKEN_ID
+  const meta = process.env.META_TOKEN
+
+    const metadata = ProgramMetadata.from(meta);
+  
+    const getBalance = () => {
+      if (gearApi) {
+        gearApi.programState
+          .read({ programId: programIDFT, payload: "" }, metadata)
+          .then((result) => {
+            fullState = result.toJSON();
+            console.log(fullState);
+            
+            const Localbalances = fullState.balances || [];
+            Localbalances.some(([address, balances]) => {
+              if (encodeAddress(address) === wallet) {
+                balance = balances;
+                return true;
+              }
+              return false;
+            });
+            // Respond with the balance
+            res.json({ balance });
+          })
+          .catch(({ message }) => console.log(message));
+      }
+    };
+
+    // Call the function to get balance
+    getBalance();
+
+    // Respond with the balance
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 
 module.exports = app;
