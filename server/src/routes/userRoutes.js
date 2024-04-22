@@ -32,7 +32,8 @@ router.get('/getAllUsers', userController.getAllUsers);
 // // delete user
 // router.delete('/delete-account', userController.deleteAccount);
 
-//
+// Ruta para actualizar una propiedad específica de un usuario por su ID
+router.put('/:id/updateProperty', userController.updateUserProperty);
 
 
 

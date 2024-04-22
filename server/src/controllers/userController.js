@@ -132,6 +132,36 @@ const userController = {
     }
   },
 
-};
+  async updateUserProperty(req, res) {
+    try {
+      const userId = req.params.id;
+      const { propertyName, propertyValue } = req.body;
+
+      // Verificar si la propiedad a actualizar existe en el modelo User
+      if (!(propertyName in User.schema.paths)) {
+        return res.status(400).json({ message: "Invalid property name" });
+      }
+
+      // Actualizar la propiedad del usuario por su ID
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $set: { [propertyName]: propertyValue } },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Excluir datos sensibles antes de enviar la respuesta
+      const { password, resetPasswordToken, resetPasswordExpires, ...userWithoutSensitiveInfo } = updatedUser.toObject();
+      res.status(200).json(userWithoutSensitiveInfo);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error updating user property" });
+    }
+  }
+
+}
 
 module.exports = userController;
