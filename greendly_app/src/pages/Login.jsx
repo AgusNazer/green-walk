@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Image, TouchableOpacity, TextInput, Alert,} from "react-native";
 import appfirebase from "../../firebase";
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
 // import * as Google from 'expo-auth-session/providers/google';
 import { Video } from 'expo-av'
@@ -11,28 +11,28 @@ import CustomText from "../components/CustomText";
 import { API_URL } from '@env';
 
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth = getAuth(appfirebase);
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const LoginWUP = async () => {
     try {
       const useCredential = await signInWithEmailAndPassword(auth, email, password);
-      const { uid, email: userEmail } = useCredential.user;
+      const {email: userEmail } = useCredential.user;
 
-      // Guarda el usuario en la base de datos de MongoDB
-      await saveUserInMongoDB(uid, userEmail);
-
+      await AsyncStorage.setItem('email', `${userEmail}`) 
+   
       navigation.navigate("BottomTab");
     } catch (error) {
       Alert.alert("Error", "Usuario o contraseña incorrecto");
       console.log(error);
     }
   };
-
-
+  
   // Función para guardar el usuario en MongoDB
   const saveUserInMongoDB = async (uid, email) => {
     try {
@@ -57,7 +57,27 @@ export default function Login({ navigation }) {
     setShowSignUp(!showSignUp);
   };
 
-  const SignUp_LogIn = ()=>{
+  const SignUp_LogIn = async ()=>{
+    if ( password !== confirmPassword){
+      Alert.alert("Error", "las contraseñas deben coincidir");
+      return;
+    }
+    try {
+      const auth = getAuth(appfirebase);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+
+      await saveUserInMongoDB(user.uid, user.email);
+  
+      Alert.alert("Registration Successful", "You may now log in with your credentials.");
+      setEmail('');
+      setPassword('');
+      navigation.navigate("BottomTab");  
+    } catch (error) {
+      console.error("Registration Error:", error);
+      Alert.alert("Registration Failed", error.message);
+    }
     Alert.alert(
       "Successfully created",
       "Log in with your username and password",
@@ -177,7 +197,7 @@ export default function Login({ navigation }) {
               
               <View style={styles.input}>
                 <TextInput
-                  onChangeText={(text) => setPassword(text)}
+                  onChangeText={(text) => setConfirmPassword(text)}
                   placeholder="Confirm Password"
                   style={{ paddingHorizontal: 15 }}
                   secureTextEntry
