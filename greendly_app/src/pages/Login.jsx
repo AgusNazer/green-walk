@@ -9,15 +9,13 @@ import axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomText from "../components/CustomText";
 import { API_URL } from '@env';
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth = getAuth(appfirebase);
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
 
   const LoginWUP = async () => {
     try {
@@ -27,6 +25,9 @@ export default function Login({ navigation }) {
       // Guarda el usuario en la base de datos de MongoDB
       // await saveUserInMongoDB(uid, userEmail);
 
+
+      await AsyncStorage.setItem('email', `${userEmail}`) 
+   
       navigation.navigate("BottomTab");
     } catch (error) {
       Alert.alert("Error", "Usuario o contraseña incorrecto");
@@ -34,8 +35,20 @@ export default function Login({ navigation }) {
     }
   };
 
-
   
+  // Función para guardar el usuario en MongoDB
+  const saveUserInMongoDB = async (uid, email) => {
+    try {
+      const response = await axios.post(`${API_URL}/users/saveUser`, {
+        uid,
+        email
+      });
+      console.log('User saved in MongoDB:', response.data);
+    } catch (error) {
+      console.log('Failed to save user in MongoDB', error);
+    }
+  };
+
 
   const [showLogIn, setShowLogIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
