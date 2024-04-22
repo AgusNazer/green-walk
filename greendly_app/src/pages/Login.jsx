@@ -8,6 +8,7 @@ import { Video } from 'expo-av'
 import axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomText from "../components/CustomText";
+import { API_URL } from '@env';
 
 
 
@@ -35,7 +36,7 @@ export default function Login({ navigation }) {
   // Función para guardar el usuario en MongoDB
   const saveUserInMongoDB = async (uid, email) => {
     try {
-      const response = await axios.post('http://192.168.1.74:3002/users/saveUser', {
+      const response = await axios.post(`${API_URL}/users/saveUser`, {
         uid,
         email
       });

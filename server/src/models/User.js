@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   },
   wallet: {
     type: String,
-    required: true,
+    required: false,
     default: null,
   },
   activities: [{

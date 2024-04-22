@@ -1,21 +1,12 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios'
-import {Notifications} from 'expo'
 import { API_URL } from '@env';
 
 
 import CardReward from '../components/CardsRewards/CardReward'
 
-const getToken = async ()=>{
-  const {status} = await Permissions.getAsync(Permissions.NOTIFICATIONS)
-  if(status !== "granted"){
-    return
-  }
-  const token = await Notifications.getExpoPushTokenAsync()
-  console.log(token);
-  return token
-}
+
 
 const handleGetRequest = async () => {
   try {
@@ -35,9 +26,6 @@ const handleGetRequest = async () => {
   }
 };
 export default class Rewards extends React.Component {
-  componentDidMount(){
-    getToken()
-  }
   render(){
     return (
       <View style={styles.container}>

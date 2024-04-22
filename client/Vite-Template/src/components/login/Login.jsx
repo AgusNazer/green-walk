@@ -34,13 +34,13 @@ export default function Login() {
         // Registro de nuevo usuario
         await doCreateUserWithEmailAndPassword(email, password);
         alert("Registro exitoso");
-        navigate('/map');
+        navigate('/dashboard');
       } else {
         // Inicio de sesión de usuario existente
         await doSignInWithEmailAndPassword(email, password);
         // console.log("Inicio de sesión exitoso");
         setSuccessMessage("Inicio de sesión exitoso. Bienvenido/a de nuevo.");
-        navigate('/map');
+        navigate('/dashboard');
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -61,7 +61,7 @@ export default function Login() {
                 const token = await auth.currentUser.getIdToken();  // Obtiene el token ID
                 console.log("Token ID:", token);  // Muestra el token ID en la consola
                 console.log("Success login");
-                navigate('/map');
+                navigate('/dashboard');
                 
             }
         }

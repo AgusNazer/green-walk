@@ -1,38 +1,67 @@
 import React from 'react'
+import { useAccount, useAlert } from "@gear-js/react-hooks";
+import axios from 'axios';
+import { AccountInfo } from '@/components/layout/header/account-info';
 
 const Dashboard = () => {
+  const {account} = useAccount()
+  const alert = useAlert()
+  const api = import.meta.env.VITE_API_URL
+  const saveWallet = async ()=>{
+    if(account){
+      try {
+        await axios.put(`${api}/users/66267e068547adc7f424d463/updateProperty`,{
+          "propertyName": "wallet",
+          "propertyValue": account.address
+      })
+      alert.success("Wallet Registrada") 
+      } catch (error) {
+        alert.error("Hubo un problema al registrar la wallet reintente")
+        console.log(error);
+        
+      }
+    }
+  else{
+    alert.error("No se encontro ninguna wallet")
+  }
+  }
+  
   return (
 <body className="flex bg-gray-100 min-h-screen">
   <aside className="hidden sm:flex sm:flex-col">
-    <a href="/" className="inline-flex items-center justify-center h-20 w-20 bg-gray-800 hover:bg-purple-500 focus:bg-purple-500">
-        <img src="/Logogreen.png" alt="" />
-    </a>
+
     <div className="flex-grow flex flex-col justify-between text-gray-500 bg-gray-800">
       <nav className="flex flex-col mx-4 my-6 space-y-4">
-        <a href="/" className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
+      <div  className="inline-flex items-center justify-center h-20 w-20 bg-gray-800">
+        <img src="/Logogreen.png" alt="" />
+    </div>
+        <div  className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
           <span className="sr-only">Folders</span>
           <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
           </svg>
-        </a>
-        <a href="/" className="inline-flex items-center justify-center py-3 text-purple-600 bg-white rounded-lg">
+        </div>
+        <div  className="inline-flex items-center justify-center py-3 text-purple-600 bg-white rounded-lg">
           <span className="sr-only">Dashboard</span>
           <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-        </a>
-        <a href="/" className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
+        </div>
+        <div  className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
           <span className="sr-only">Messages</span>
           <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
-        </a>
-        <a href="/" className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
+        </div>
+        <div  className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
           <span className="sr-only">Documents</span>
           <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
           </svg>
-        </a>
+        </div>
+        <div className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
+        <AccountInfo/>
+        </div>
       </nav>
       <div className="inline-flex items-center justify-center h-20 w-20 border-t border-gray-700">
         <button className="p-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
@@ -104,7 +133,7 @@ const Dashboard = () => {
             </svg>
             Manage dashboard
           </button>
-          <button className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3">
+          <button onClick={saveWallet} className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3">
             <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="flex-shrink-0 h-6 w-6 text-white -ml-1 mr-2">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
