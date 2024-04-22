@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
 import { Auth, getAuth } from "firebase/auth";
+import { API_URL } from '@env';
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({
@@ -36,7 +37,7 @@ export default function UserProfile() {
     }
 
     const url =
-      "http://192.168.1.74:3002/users/profile/661496802cde996cc19493c8";
+      `${API_URL}/users/profile/${setUserId}`;
     try {
       const response = await axios.put(url, userInfo);
 
