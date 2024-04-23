@@ -22,7 +22,11 @@ export default function Login({ navigation }) {
   const LoginWUP = async () => {
     try {
       const useCredential = await signInWithEmailAndPassword(auth, email, password);
-      const {email: userEmail } = useCredential.user;
+      const { uid, email: userEmail } = useCredential.user;
+
+      // Guarda el usuario en la base de datos de MongoDB
+      // await saveUserInMongoDB(uid, userEmail);
+
 
       await AsyncStorage.setItem('email', `${userEmail}`) 
    
@@ -32,20 +36,21 @@ export default function Login({ navigation }) {
       console.log(error);
     }
   };
+
   
   // Función para guardar el usuario en MongoDB
-  const saveUserInMongoDB = async (uid, email,username) => {
+  const saveUserInMongoDB = async (uid, email) => {
     try {
-       await axios.post(`${API_URL}/users/register`, {
+      const response = await axios.post(`${API_URL}/users/saveUser`, {
         uid,
-        email,
-        username
+        email
       });
-      console.log('User saved in MongoDB:');
+      console.log('User saved in MongoDB:', response.data);
     } catch (error) {
       console.log('Failed to save user in MongoDB', error);
     }
   };
+
 
   const [showLogIn, setShowLogIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
@@ -58,57 +63,48 @@ export default function Login({ navigation }) {
     setShowSignUp(!showSignUp);
   };
 
-  const SignUp_LogIn = async ()=>{
-    if ( password !== confirmPassword){
-      Alert.alert("Error", "las contraseñas deben coincidir");
+  // Función para guardar el usuario en MongoDB
+  const saveUserInMongoDB = async (userData) => {
+    try {
+      const response = await axios.post(`${API_URL}/users/register`, userData);
+      console.log('User saved in MongoDB:', response.data);
+    } catch (error) {
+      console.error('Failed to save user in MongoDB', error);
+    }
+  };
+
+  const SignUp_LogIn = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Las contraseñas deben coincidir");
       return;
     }
-    try {
-      const auth = getAuth(appfirebase);
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
   
-
-     await saveUserInMongoDB(user.uid, user.email ,user.email);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const { uid, email: userEmail } = userCredential.user;
+      const username = email.split('@')[0];
+  
+      const userData = {
+        uid,
+        email: userEmail,
+        username
+      };
+  
+      await saveUserInMongoDB(userData);
   
       Alert.alert("Registration Successful", "You may now log in with your credentials.");
       setEmail('');
       setPassword('');
+      setConfirmPassword('');
       navigation.navigate("BottomTab");  
     } catch (error) {
       console.error("Registration Error:", error);
-      Alert.alert("Registration Failed", error.message);
+      Alert.alert("Registration Failed", error.message || 'Failed to register');
     }
-    Alert.alert(
-      "Successfully created",
-      "Log in with your username and password",
-    )
-  }
+  };
 
-  // GoogleSignin.configure({
-  //   webClientId: 'project-749114756416.apps.googleusercontent.com',
-  // });
+  
 
-  // const googleLogin = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices();
-  //     const userInfo = await GoogleSignin.signIn();
-  //     const { idToken } = userInfo;
-  //     const googleCredential = GoogleAuthProvider.credential(idToken);
-  
-  //     // Autenticación con Firebase usando las credenciales de Google
-  //     const auth = getAuth();
-  //     await signInWithCredential(auth, googleCredential);
-  
-  //     // Aquí podrías llamar a `saveUserInMongoDB` con la información del usuario si es necesario
-  
-  //     // Si todo es exitoso, redirige al usuario a la pantalla "BottomTab"
-  //     navigation.navigate("BottomTab");
-  //   } catch (error) {
-  //     Alert.alert("Login Failed", error.message);
-  //     console.error(error);
-  //   }
-  // };
 
   return (
 
