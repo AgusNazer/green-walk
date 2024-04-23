@@ -14,6 +14,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
 import { Auth, getAuth } from "firebase/auth";
 import { API_URL } from '@env';
+// import * as ImagePicker from "expo-image-picker;"
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({
@@ -76,6 +77,10 @@ export default function UserProfile() {
     };
     loadUserInfo();
   }, []);
+
+  // Subir imagen con expo picker image
+  
+  
 
   return (
     <ScrollView className="flex-1 bg-transparent p-4">
