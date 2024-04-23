@@ -109,7 +109,7 @@ export default function Login({ navigation }) {
 
   // Función para guardar el usuario en MongoDB
   // const saveUserInMongoDB = async (userData) => {
-  //   try {
+  //   try { r
   //     const response = await axios.post(`${API_URL}/users/register`, userData);
   //     console.log('User saved in MongoDB:', response.data);
   //   } catch (error) {
