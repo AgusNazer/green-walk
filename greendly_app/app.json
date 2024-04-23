@@ -38,6 +38,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "scheme": "miapp",
+    "extra": {
+      "eas": {
+        "projectId": "c01695c1-4652-40b6-88c5-2e3433c2855c"
+      }
+    }
   }
 }

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { StyleSheet, View, Image, TouchableOpacity, TextInput, Alert,} from "react-native";
 import appfirebase from "../../firebase";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
-// import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser'
+import * as Google from 'expo-auth-session/providers/google'
 import { Video } from 'expo-av'
 import axios from "axios";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,9 +15,64 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth = getAuth(appfirebase);
 export default function Login({ navigation }) {
+//ANDROID
+//994723718979-caq5o5d0jfmurcg9frhqd5itcrinr3vh.apps.googleusercontent.com
+//APPLE
+//994723718979-0ekbnlvd607s8itqe4bucfr4rc68d9k9.apps.googleusercontent.com
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [token, setToken] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: "994723718979-caq5o5d0jfmurcg9frhqd5itcrinr3vh.apps.googleusercontent.com",
+    iosClientId: "994723718979-0ekbnlvd607s8itqe4bucfr4rc68d9k9.apps.googleusercontent.com",
+    webClientId: "994723718979-dfksqsdlcjcd9ud599deicvlque8mohm.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    handleEffect();
+  }, [response, token]);
+
+  async function handleEffect() {
+    const user = await getLocalUser();
+    console.log("user", user);
+    if (!user) {
+      if (response?.type === "success") {
+        // setToken(response.authentication.accessToken);
+        getUserInfo(response.authentication.accessToken);
+      }
+    } else {
+      setUserInfo(user);
+      console.log("loaded locally");
+    }
+  }
+
+  const getLocalUser = async () => {
+    const data = await AsyncStorage.getItem("@user");
+    if (!data) return null;
+    return JSON.parse(data);
+  };
+
+  const getUserInfo = async (token) => {
+    if (!token) return;
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const user = await response.json();
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
+      setUserInfo(user);
+    } catch (error) {
+      // Add your own error handler here
+    }
+  };
 
   const LoginWUP = async () => {
     try {
@@ -38,18 +93,7 @@ export default function Login({ navigation }) {
   };
 
   
-  // Función para guardar el usuario en MongoDB
-  const saveUserInMongoDB = async (uid, email) => {
-    try {
-      const response = await axios.post(`${API_URL}/users/saveUser`, {
-        uid,
-        email
-      });
-      console.log('User saved in MongoDB:', response.data);
-    } catch (error) {
-      console.log('Failed to save user in MongoDB', error);
-    }
-  };
+
 
 
   const [showLogIn, setShowLogIn] = useState(false);
@@ -229,8 +273,10 @@ export default function Login({ navigation }) {
           {(!showLogIn && !showSignUp) &&(
             <TouchableOpacity
               style={styles.btnLogin}
-              // onPress={googleLogin}
-              onPress={() => navigation.navigate("BottomTab")}
+              disabled={!request}
+              onPress={() => {
+                promptAsync();
+              }}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <CustomText style={{ fontWeight: "600" }}>Log in with Google</CustomText>

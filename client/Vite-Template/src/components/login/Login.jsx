@@ -8,6 +8,7 @@ import { useAuth } from "../../context";
 import { auth } from "../../firebase/firebase";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 
 export default function Login() {
@@ -21,61 +22,68 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isVisible, setIsVisible] = useState(true);
-
-  
+  const api = import.meta.env.VITE_API_URL
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setIsSignIn(true); // Indicar que se está procesando
+    setIsSignIn(true);
     setErrorMessage("");
     setSuccessMessage("");
     try {
       if (isSignUp) {
-        // Registro de nuevo usuario
         await doCreateUserWithEmailAndPassword(email, password);
         alert("Registro exitoso");
         navigate('/dashboard');
       } else {
-        // Inicio de sesión de usuario existente
         await doSignInWithEmailAndPassword(email, password);
-        // console.log("Inicio de sesión exitoso");
         setSuccessMessage("Inicio de sesión exitoso. Bienvenido/a de nuevo.");
         navigate('/dashboard');
       }
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
-      setIsSignIn(false); // Finalizar el proceso de inicio de sesión/registro
+      setIsSignIn(false);
     }
   };
-  // with google
+
   const onGoogleSignIn = async () => {
     const auth = getAuth();
     setErrorMessage("");
-    setIsSignIn(true); // Asumiendo que quieres indicar que se está intentando iniciar sesión
+    setIsSignIn(true);
 
     try {
-        if (!isSigninIn) {
-            await doSignInWithGoogle();
-            if (auth.currentUser) {
-                const token = await auth.currentUser.getIdToken();  // Obtiene el token ID
-                console.log("Token ID:", token);  // Muestra el token ID en la consola
-                console.log("Success login");
-                navigate('/dashboard');
-                
-            }
-        }
-    } catch (error) {
-        console.log("Error signing in:", error);
-        setErrorMessage(error.message);
-        // Aquí decides si quieres cerrar sesión en caso de error
-        await signOut(auth); // Cierra sesión si el inicio de sesión falla
-    } finally {
-        setIsSignIn(false); // Indica que el proceso de inicio de sesión ha terminado
-    }
-};
+      if (!isSigninIn) {
+        await doSignInWithGoogle();
+        if (auth.currentUser) {
+          const user = auth.currentUser;
+          const token = await user.getIdToken();
 
-  // Función para alternar entre registro y login
+          const username = user.email.split('@')[0];
+
+          // Aquí envías la información del usuario a tu servidor Node.js (o similar)
+          const userData = {
+            uid: user.uid,
+            username: username,
+            email: user.email,
+          };
+
+          // Haces una solicitud HTTP POST a tu servidor para guardar los datos en MongoDB
+          await axios.post(`${api}/users/register`, userData);
+
+          console.log("Token ID:", token);
+          console.log("Success login");
+          navigate('/dashboard');
+        }
+      }
+    } catch (error) {
+      console.log("Error signing in:", error);
+      setErrorMessage(error.message);
+      await signOut(auth);
+    } finally {
+      setIsSignIn(false);
+    }
+  };
+
   const toggleSignUp = () => setIsSignUp(!isSignUp);
   
 
