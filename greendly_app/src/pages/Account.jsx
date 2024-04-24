@@ -27,56 +27,43 @@ export default function UserProfile() {
   });
 
   const [userId, setUserId] = useState(null);
-  const [editableField, setEditableField] = useState(""); // Estado para controlar el campo editable
+  const [userEmail, setUserEmail] = useState("")
+  const [editableField, setEditableField] = useState("");
   const auth = getAuth();
-  const userEmail = auth.currentUser ? auth.currentUser.email : '';
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setUserId(user.uid);
+      setUserEmail(user.email.split('@')[0]);  
+      AsyncStorage.setItem("userId", user.uid);
+      console.log("Usuario cargado:", user.email);
+      // Actualizar el estado con la información del usuario
+      setUserInfo({
+        ...userInfo,
+        name: user.displayName || "",
+        email: user.email || "",
+        photoUrl: user.photoUrl || "https://via.placeholder.com/150",
+      });
+    }
+  }, [auth]);
 
   const handleUpdateProfile = async () => {
     if (!userId) {
       Alert.alert("Error", "No se pudo identificar al usuario");
       return;
     }
-
-    const url =
-      `${API_URL}/users/profile/${setUserId}`;
+  
+    const url = `${API_URL}/users/profile/${userId}`;
     try {
       const response = await axios.put(url, userInfo);
-
-      // Actualizar el estado con la información modificada por el usuario
-      setUserInfo((prevState) => ({
-        ...prevState,
-        name: response.data.name,
-        country: response.data.country,
-        objetivo: response.data.objetivo,
-        tokensEarned: response.data.tokensEarned,
-        carbonFootprint: response.data.carbonFootprint,
-      }));
-
-      // Guardar el nuevo userInfo en AsyncStorage
-      await AsyncStorage.setItem("userInfo", JSON.stringify(response.data));
-
-      Alert.alert(
-        "Perfil Actualizado",
-        "Tu perfil ha sido actualizado con éxito."
-      );
+      Alert.alert("Perfil Actualizado", "Tu perfil ha sido actualizado con éxito.");
+      AsyncStorage.setItem("userInfo", JSON.stringify(userInfo)); // Asegúrate de actualizar también el AsyncStorage después de una actualización exitosa
     } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
       Alert.alert("Error", "No se pudo actualizar el perfil.");
     }
   };
-
-  useEffect(() => {
-    const loadUserInfo = async () => {
-      const storedUserInfo = await AsyncStorage.getItem("userInfo");
-      if (storedUserInfo) {
-        setUserInfo(JSON.parse(storedUserInfo));
-      }
-      const storedUserId = await AsyncStorage.getItem("userId");
-      if (setUserId) {
-        setUserId(storedUserId);
-      }
-    };
-    loadUserInfo();
-  }, []);
 
   // Subir imagen con expo picker image
   
@@ -100,7 +87,7 @@ export default function UserProfile() {
             </View>
           </View>
         </View>
-        <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 8 }}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 8 }}> Username: 
           {userEmail}
         </Text>
         <Text style={{ fontSize: 14, color: "#666", marginTop: 4 }}>

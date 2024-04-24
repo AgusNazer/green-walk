@@ -12,7 +12,7 @@ router.post('/saveUser', userController.saveUser);
 // router.post('/login', userController.login);
 
 // update user
-router.put('/profile/:id', userController.updateProfile);
+router.put('/:id', userController.updateProfile);
 
 // // change password
 // router.put('/change-password', userController.changePassword);
@@ -25,6 +25,9 @@ router.put('/profile/:id', userController.updateProfile);
 
 //get user
 router.get('/getAllUsers', userController.getAllUsers);
+
+// Ruta para obtener un usuario por ID
+router.get('/:id', userController.getUserById);
 
 // info profile
 // router.get('/profile', userController.getProfile);
