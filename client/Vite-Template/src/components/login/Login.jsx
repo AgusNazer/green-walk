@@ -66,6 +66,7 @@ export default function Login() {
             username: username,
             email: user.email,
           };
+          localStorage.setItem('userEmail', user.email);
 
           // Haces una solicitud HTTP POST a tu servidor para guardar los datos en MongoDB
           await axios.post(`${api}/users/register`, userData);

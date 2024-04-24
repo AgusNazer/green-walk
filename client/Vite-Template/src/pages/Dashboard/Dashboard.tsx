@@ -4,27 +4,38 @@ import axios from 'axios';
 import { AccountInfo } from '@/components/layout/header/account-info';
 
 const Dashboard = () => {
+  const userEmail = localStorage.getItem('userEmail');
   const {account} = useAccount()
   const alert = useAlert()
   const api = import.meta.env.VITE_API_URL
   const saveWallet = async ()=>{
     if(account){
       try {
-        await axios.put(`${api}/users/66267e068547adc7f424d463/updateProperty`,{
-          "propertyName": "wallet",
-          "propertyValue": account.address
-      })
-      alert.success("Wallet Registrada") 
+        const request = await axios.get(`${api}/users/getAllUsers`)
+        const response = request.data
+        const foundUser = response.find(user => user.email === userEmail);
+        if (foundUser) {
+          try {
+            await axios.put(`${api}/users/${foundUser._id}/updateProperty`,{
+              "propertyName": "wallet",
+              "propertyValue": account.address
+          })
+          alert.success("Wallet Registrada") 
+          } catch (error) {
+            alert.error("Hubo un problema al registrar la wallet reintente")
+            console.log(error);
+            
+          }   
+        }
       } catch (error) {
-        alert.error("Hubo un problema al registrar la wallet reintente")
-        console.log(error);
-        
+    console.log(error);
       }
     }
   else{
     alert.error("No se encontro ninguna wallet")
   }
   }
+  console.log(userEmail);
   
   return (
 <body className="flex bg-gray-100 min-h-screen">
