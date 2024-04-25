@@ -32,6 +32,23 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: null,
   },
+  country: {
+    type: String,
+    required: false,  // Dependiendo de si quieres que siempre se especifique un país
+  },
+  objective: {
+    type: String,
+    required: false,  // Dependiendo de la necesidad de este campo en la lógica de negocio
+  },
+  carbonFootprint: {
+    type: Number,
+    required: false,  // Este podría ser String o Number, dependiendo de cómo desees manejarlo
+  },
+  tokensGanados: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   activities: [{
     date: Date,
     duration: Number,
