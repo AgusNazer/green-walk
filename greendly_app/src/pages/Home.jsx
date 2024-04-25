@@ -8,6 +8,8 @@ import themes from '../themeMap';
 import CardsHome from '../components/CardsHome';
 import CustomText from '../components/CustomText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAuth } from "firebase/auth";
+import appfirebase from "../../firebase";
 
 const { themeDark, themeLight } = themes;
 
@@ -53,6 +55,57 @@ export default function Home() {
   const [dark, setDark] = useState(false);
   const [locationLoaded, setLocationLoaded] = useState(false);
   const [iamReady, setIamReady] = useState(false)
+  const [userId, setUserId] = useState(null);
+  const [emailStorage, setEmailStorage] = useState('')
+  const [currentUser, setCurrentUser] = useState(null);
+  const auth = getAuth(appfirebase);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      const { displayName, email, photoURL, uid } = currentUser;
+      setEmailStorage(email);
+    }
+  }, [currentUser]); 
+ 
+  useEffect(() => {
+    const fetchUserIdByEmail = async () => {
+      try {
+        const response = await fetch(`http://192.168.0.26:3002/users/getEmail?email=${emailStorage}`);
+        const data = await response.json();
+        console.log(response.url)
+        if (response.ok) {
+          setUserId(data.userId);
+          console.log(data.userId)
+          if (data.userId) {
+            await AsyncStorage.setItem('id', data.userId);
+          } else {
+            await AsyncStorage.removeItem('id');
+          }
+        } else {
+          console.error('Error fetching user ID res:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+      }
+    };
+  
+    const timeoutId = setTimeout(() => {
+      fetchUserIdByEmail();
+    }, 1000);
+  
+    return () => clearTimeout(timeoutId);
+  }, [emailStorage]); 
 
   useEffect(() => {
     const backAction = () => {
@@ -100,6 +153,38 @@ export default function Home() {
     text = `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`;
   }
 
+  const calculateTotalDistance = () => {
+    let calculatedDistance = 0;
+    for (let i = 1; i < locations.length; i++) {
+      const prevLocation = locations[i - 1];
+      const currentLocation = locations[i];
+      const distance = calculateDistance(
+        prevLocation.latitude,
+        prevLocation.longitude,
+        currentLocation.latitude,
+        currentLocation.longitude
+      );
+      if (isRecording && distance >= 1) {
+        calculatedDistance += distance;
+      }
+    }
+    return calculatedDistance;
+  };
+
+  useEffect(() => {
+    if (isRecording) {
+      const distance = calculateTotalDistance();
+      setTotalDistance(distance);
+    }
+  }, [locations]);
+
+  const customMapStyle = dark ? themeDark : themeLight;
+
+  const toggleInputs = () => {
+    setIamReady(!iamReady);
+  };
+
+
   const handleStartRecording = async () => {
     try {
       setIsRecording(true);
@@ -129,11 +214,32 @@ export default function Home() {
     }
   };
 
-  const handleStopRecording = () => {
+  const handleStopRecording = async () => {
     setIsRecording(false);
     setIsTimerRunning(false);
     clearInterval(timerId);
     setTimerId(null);
+    
+    try {
+      const response = await fetch('http://192.168.0.26:3002/activity/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          date: new Date().toISOString(),
+          distance: totalDistance,
+          duration: elapsedTime,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      // Reset totalDistance to 0 after successful request
+      setTotalDistance(0);
+    } catch (error) {
+      console.error('Error al enviar la solicitud:', error);
+    }
   };
 
   useEffect(() => {
@@ -150,47 +256,12 @@ export default function Home() {
 
     return () => clearInterval(intervalId);
   }, [isTimerRunning, startTime]);
-
-  const calculateTotalDistance = () => {
-    let calculatedDistance = 0;
-    for (let i = 1; i < locations.length; i++) {
-      const prevLocation = locations[i - 1];
-      const currentLocation = locations[i];
-      const distance = calculateDistance(
-        prevLocation.latitude,
-        prevLocation.longitude,
-        currentLocation.latitude,
-        currentLocation.longitude
-      );
-      if (isRecording && distance >= 5) {
-        calculatedDistance += distance;
-      }
-    }
-    return calculatedDistance;
-  };
-
-  useEffect(() => {
-    if (isRecording) {
-      const distance = calculateTotalDistance();
-      setTotalDistance(distance);
-    }
-  }, [locations, isRecording]);
-
-  const customMapStyle = dark ? themeDark : themeLight;
-
-  const toggleInputs = () => {
-    setIamReady(!iamReady);
-  };
   
-  // funcion para almacenar email de usaurio logeado en "LocalStorage"
-  const [emailStorage, setEmailStorage] = useState('')
 
-  const getData = async () => {
-    const value = await AsyncStorage.getItem('email');
-    setEmailStorage(value)
-    // console.log(emailStorage)   
-  };    
-  getData();
+
+  
+
+  
 
   return (
     <>
@@ -300,6 +371,34 @@ export default function Home() {
             </Text>
           </View>
         </View>
+
+
+        <View>
+          <View className="flex flex-row justify-evenly mb-4" >
+            <View className="flex flex-col justify-center items-center" >
+              <Text style={styles.distanceText}>
+                {(totalDistance / 1000).toFixed(2) + ' Km'}
+              </Text>
+
+              <Text className="">
+                Distance
+              </Text>
+            </View>
+
+            <View className="flex flex-col justify-center items-center">
+              <Text style={styles.timeText}>
+                {formatTime(elapsedTime)}
+              </Text>
+
+              <Text className="" >
+                Time
+              </Text>
+            </View>
+          </View>
+        </View>
+
+
+
       </View>
     </>
   );
