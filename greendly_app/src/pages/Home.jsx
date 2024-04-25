@@ -83,12 +83,12 @@ export default function Home() {
   useEffect(() => {
     const fetchUserIdByEmail = async () => {
       try {
-        const response = await fetch(`${API_URL}/users/getEmail?email=${emailStorage}`);
+        const response = await fetch(`${API_URL}/users/getMongoUserId/${emailStorage}`);
         const data = await response.json();
-        console.log(response.url)
+        console.log(response.url);
         if (response.ok) {
           setUserId(data.userId);
-          console.log(data.userId)
+          console.log(data.userId);
           if (data.userId) {
             await AsyncStorage.setItem('id', data.userId);
           } else {
@@ -107,7 +107,7 @@ export default function Home() {
     }, 1000);
   
     return () => clearTimeout(timeoutId);
-  }, [emailStorage]); 
+  }, [emailStorage]);
 
   useEffect(() => {
     const backAction = () => {
