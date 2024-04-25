@@ -65,18 +65,14 @@ export default function Login({ navigation }) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-      if (!user) {
-        if (response?.type === "success") {
+        if (response !== null) {
           // setToken(response.authentication.accessToken);
           getUserInfo(response.authentication.accessToken);
           // Aquí puedes agregar la navegación a la ruta deseada
           navigation.navigate("BottomTab"); // Reemplaza "RUTA_DESEADA" con el nombre de la ruta a la que deseas navegar
         }
-      } else {
         setUserInfo(user);
         console.log("loaded locally");
-      }
     } catch (error) {
       // Add your own error handler here
     }

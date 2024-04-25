@@ -21,7 +21,7 @@ const activitySchema = new mongoose.Schema({
   },
   tokensEarned: {
     type: Number,
-    required: true,
+    required: false,
   },
 }, { timestamps: true });
 
