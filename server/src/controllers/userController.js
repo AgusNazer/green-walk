@@ -1,9 +1,5 @@
 const User = require("../models/User");
 
-// Obtener usuarios de la db
-
-
-
 //  post controller crear usuario
 const userController = {
   async register(req, res) {
@@ -27,7 +23,7 @@ const userController = {
         resetPasswordExpires,
         ...userWithoutPassword
       } = savedUser.toObject();
-      res.status(201).json(userWithoutPassword);
+      res.status(201).json({ userId: savedUser._id, ...userWithoutSensitiveInfo });
     } catch (error) {
       console.error(error);
       if (error.name === "ValidationError") {
@@ -50,12 +46,13 @@ const userController = {
   async updateProfile(req, res) {
     try {
       const userId = req.params.id;
-      const { country, objective, carbonFootprint, photoUrl } = req.body;
+      const { username, country, objective, carbonFootprint, photoUrl } = req.body;
 
       const updatedUser = await User.findByIdAndUpdate(
         userId,
         {
           $set: {
+            username,
             country,
             objective,
             carbonFootprint,
@@ -86,7 +83,7 @@ const userController = {
   async saveUser(req, res) {
     try {
       const { uid, email } = req.body;
-      const username = email.split("@")[0]; // Genera un username a partir del email
+      // const username = email.split("@")[0]; // Genera un username a partir del email
 
       // Validación simple del email
       if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -131,7 +128,22 @@ const userController = {
         res.status(500).json({ message: "Error retrieving users from database" });
     }
   },
+  // get user by id
+  async getUserById(req, res) {
+    try {
+      const userId = req.params.id;
+      const user = await User.findById(userId).select('-password -resetPasswordToken -resetPasswordExpires'); // Excluye campos sensibles
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      console.error("Error fetching user by ID:", error);
+      res.status(500).json({ message: "Error retrieving user" });
+    }
+  },
 
+   // ACtualizar una propiedad del user
   async updateUserProperty(req, res) {
     try {
       const userId = req.params.id;
@@ -161,25 +173,36 @@ const userController = {
       res.status(500).json({ message: "Error updating user property" });
     }
   },
-
-  async getUserByEmail(req, res) {
+  //Delete all users de mongo
+  async deleteAllUsers(req, res) {
     try {
-      const { email } = req.query; // Obtener el email de los parámetros de la consulta (query parameter)
-  
-      // Buscar el usuario por su correo electrónico
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-  
-      // Devolver el ID del usuario encontrado
-      res.status(200).json({ userId: user._id });
+        await User.deleteMany({});  
+        res.status(200).json({ message: "All users have been deleted successfully." });
     } catch (error) {
-      console.error("Error retrieving user by email:", error);
-      res.status(500).json({ message: "Error retrieving user by email" });
+        console.error("Error deleting all users:", error);
+        res.status(500).json({ message: "Error deleting all users" });
     }
+},
+// Función para obtener el ID de MongoDB por email o Firebase UID
+async  getMongoUserIdByEmail(req, res) {
+  try {
+    // Normaliza el email para evitar problemas de case sensitivity
+    const email = req.params.email.toLowerCase();
+    const user = await User.findOne({ email: email });
+    console.log(user);
+    if (user) {
+        // Si se encuentra el usuario, devolver el ID de MongoDB
+        res.status(200).json({ userId: user._id.toString() });
+    } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al buscar el usuario:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
+},
+
+
 
 }
 
