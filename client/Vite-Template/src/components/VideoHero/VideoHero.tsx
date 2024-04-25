@@ -24,15 +24,15 @@ const VideoHero = () => {
             Brand new
           </p>
           <h2 className="mb-5 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
-            ¿Que es Blockchain
+          What is Blockchain
             <br className="hidden md:block" />
-            y que hay{' '}
+            and what's {' '}
             <span className="inline-block text-purple-400">
-              detras de greendly?
+            behind greendly?
             </span>
           </h2>
           <p className="pr-5 mb-5 text-base text-gray-700 md:text-lg">
-          El blockchain es un libro de contabilidad global distribuido en millones de computadoras, asegurando transacciones transparentes y seguras. La Web3, basada en blockchain, permite interacciones directas sin intermediarios. Vara Network simplifica el desarrollo de aplicaciones descentralizadas para la Web3, destacando por su escalabilidad, seguridad y costos reducidos.
+          The blockchain is a global ledger distributed across millions of computers, ensuring transparent and secure transactions. Web3, based on blockchain, enables direct interactions without intermediaries. Vara Network simplifies the development of decentralised applications for the Web3, standing out for its scalability, security and reduced costs.
           </p>
         </div>
       </div>

@@ -17,19 +17,19 @@ const Hero = () => {
             className="text-3xl leading-tight sm:text-4xl md:text-5xl xl:text-6xl
             font-bold text-gray-900"
           >
-           Corre por el planeta y {" "}
+           Run for the planet and {" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 from-20% via-blue-600 via-30% to-green-600">
-              Gana
+            Earn
             </span>
             <span> </span>
-             tokens eco-amigables.
+            eco-friendly tokens.
           </h1>
           <p className="mt-8 text-gray-700">
-          Nuestra aplicación incentiva a las personas a elegir caminar en lugar de conducir, transformando cada
-paso en una oportunidad de ganar recompensas digitales. A medida que los usuarios exploran las
-calles, sin importar dónde se encuentren en el mundo, generan automáticamente tokens. Estos tokens
-se almacenan de manera segura y ofrecen a los usuarios la flexibilidad de intercambiarlos o adquirir
-más dentro del ecosistema de la blockchain.
+          Our app encourages people to choose walking over driving, turning every step into an opportunity to earn digital rewards.
+into an opportunity to earn digital rewards. As users explore the streets, no matter where they are in the world
+streets, no matter where they are in the world, they automatically generate tokens. These tokens
+are securely stored and offer users the flexibility to trade them or acquire more within the blockchain ecosystem.
+more within the blockchain ecosystem.
 
           </p>
         </div>
