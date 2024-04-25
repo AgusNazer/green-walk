@@ -35,6 +35,6 @@ function getLocalIpAddress() { // funcion para traer la IpV4 del equipo local
 
 const ipAddress = getLocalIpAddress();
 
-app.listen(port, '192.168.0.26', () => {
-  console.log(`Servidor Express escuchando en 192.168.0.26 ${ipAddress}, ${port}`);
+app.listen(port, ipAddress, () => {
+  console.log(`Servidor Express escuchando en ${ipAddress}, ${port}`);
 });
