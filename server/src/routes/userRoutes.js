@@ -12,7 +12,7 @@ router.post('/saveUser', userController.saveUser);
 // router.post('/login', userController.login);
 
 // update user
-router.put('/profile/:id', userController.updateProfile);
+router.put('/:id', userController.updateProfile);
 
 // // change password
 // router.put('/change-password', userController.changePassword);
@@ -26,13 +26,19 @@ router.put('/profile/:id', userController.updateProfile);
 //get user
 router.get('/getAllUsers', userController.getAllUsers);
 
-router.get('/getEmail', userController.getUserByEmail);
+// Ruta para obtener un usuario por ID
+router.get('/:id', userController.getUserById);
 
+// Ruta para obtener el ID de MongoDB usando el email
+router.get('/getMongoUserId/:email', userController.getMongoUserIdByEmail);
 // info profile
 // router.get('/profile', userController.getProfile);
 
 // // delete user
 // router.delete('/delete-account', userController.deleteAccount);
+
+// delete all users
+router.delete('/deleteAllUsers', userController.deleteAllUsers)
 
 // Ruta para actualizar una propiedad específica de un usuario por su ID
 router.put('/:id/updateProperty', userController.updateUserProperty);
