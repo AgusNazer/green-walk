@@ -29,11 +29,16 @@ router.get('/getAllUsers', userController.getAllUsers);
 // Ruta para obtener un usuario por ID
 router.get('/:id', userController.getUserById);
 
+// Ruta para obtener el ID de MongoDB usando el email
+router.get('/getMongoUserId/:email', userController.getMongoUserIdByEmail);
 // info profile
 // router.get('/profile', userController.getProfile);
 
 // // delete user
 // router.delete('/delete-account', userController.deleteAccount);
+
+// delete all users
+router.delete('/deleteAllUsers', userController.deleteAllUsers)
 
 // Ruta para actualizar una propiedad específica de un usuario por su ID
 router.put('/:id/updateProperty', userController.updateUserProperty);

@@ -23,7 +23,7 @@ const userController = {
         resetPasswordExpires,
         ...userWithoutPassword
       } = savedUser.toObject();
-      res.status(201).json(userWithoutPassword);
+      res.status(201).json({ userId: savedUser._id, ...userWithoutSensitiveInfo });
     } catch (error) {
       console.error(error);
       if (error.name === "ValidationError") {
@@ -172,7 +172,37 @@ const userController = {
       console.error(error);
       res.status(500).json({ message: "Error updating user property" });
     }
+  },
+  //Delete all users de mongo
+  async deleteAllUsers(req, res) {
+    try {
+        await User.deleteMany({});  
+        res.status(200).json({ message: "All users have been deleted successfully." });
+    } catch (error) {
+        console.error("Error deleting all users:", error);
+        res.status(500).json({ message: "Error deleting all users" });
+    }
+},
+// Función para obtener el ID de MongoDB por email o Firebase UID
+async  getMongoUserIdByEmail(req, res) {
+  try {
+    // Normaliza el email para evitar problemas de case sensitivity
+    const email = req.params.email.toLowerCase();
+    const user = await User.findOne({ email: email });
+    console.log(user);
+    if (user) {
+        // Si se encuentra el usuario, devolver el ID de MongoDB
+        res.status(200).json({ userId: user._id.toString() });
+    } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al buscar el usuario:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
+},
+
+
 
 }
 

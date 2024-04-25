@@ -88,8 +88,15 @@ export default function Login({ navigation }) {
       const { uid, email: userEmail } = useCredential.user;
 
       // Guarda el usuario en la base de datos de MongoDB
-      // await saveUserInMongoDB(uid, userEmail);
+      // Endpoint que retorna el MongoDB UserId utilizando el email o UID
+      const response = await axios.get(`${API_URL}/users/getMongoUserId/${email}`);
 
+      if (response.data && response.data.userId) {
+          await AsyncStorage.setItem('@mongoUserId', response.data.userId);
+          console.log("MongoDB User ID saved:", response.data.userId);
+      } else {
+          console.log("Failed to receive MongoDB User ID from backend");
+      }
 
       await AsyncStorage.setItem('email', `${userEmail}`) 
    
@@ -116,14 +123,20 @@ export default function Login({ navigation }) {
   };
 
   // Función para guardar el usuario en MongoDB
-  // const saveUserInMongoDB = async (userData) => {
-  //   try { r
-  //     const response = await axios.post(`${API_URL}/users/register`, userData);
-  //     console.log('User saved in MongoDB:', response.data);
-  //   } catch (error) {
-  //     console.error('Failed to save user in MongoDB', error);
-  //   }
-  // };
+  const saveUserInMongoDB = async (userData) => {
+    try { 
+      const response = await axios.post(`${API_URL}/users/register`, userData);
+      console.log('User saved in MongoDB:', response.data);
+      // agregue esto para el id de mongo
+      // if (response.data.userId) {
+      //   // Guardar el userId en el estado o en AsyncStorage para uso futuro
+      //   AsyncStorage.setItem('@mongoUserId', response.data.userId);
+      //   console.log('MongoDB User ID saved:', response.data.userId);
+      // }
+    } catch (error) {
+      console.error('Failed to save user in MongoDB', error);
+    }
+  };
 
   const SignUp_LogIn = async () => {
     if (password !== confirmPassword) {
@@ -135,6 +148,7 @@ export default function Login({ navigation }) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const { uid, email: userEmail } = userCredential.user;
       const username = email.split('@')[0];
+      // console.log(`user id: ${uid}` );
   
       const userData = {
         uid,
@@ -143,6 +157,7 @@ export default function Login({ navigation }) {
       };
   
       await saveUserInMongoDB(userData);
+;
   
       Alert.alert("Registration Successful", "You may now log in with your credentials.");
       setEmail('');
