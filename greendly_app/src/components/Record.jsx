@@ -38,7 +38,6 @@ export default function Record() {
       } catch (error) {
         console.error(error);
         setLoading(false);
-        // Manejar el error, por ejemplo, mostrando un mensaje al usuario
       }
     };
 
@@ -59,7 +58,7 @@ export default function Record() {
 
       <ScrollView >
         {activities.map((activity, index) => (
-          <View key={index} className="flex flex-row justify-evenly mb-2 bg-gray-900 py-2 w-full">
+          <View key={index} className="flex flex-row justify-evenly mb-[1] bg-gray-800 py-2 w-full">
 
             <View className="flex flex-col justify-center items-center" >
               <Text style={styles.distanceText}>

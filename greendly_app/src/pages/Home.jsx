@@ -300,7 +300,7 @@ export default function Home() {
                 }}
                 title="Inicio"
                 description="Inicio del recorrido"
-                pinColor="#1D57CB"
+                pinColor="#7BC239"
               />
               {locations.length > 1 && (
                 <Marker
@@ -310,7 +310,7 @@ export default function Home() {
                   }}
                   title="Fin"
                   description="Fin del recorrido"
-                  pinColor="red"
+                  pinColor="#E56644"
                 />
               )}
             </>
@@ -397,10 +397,10 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   startButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#7BC239',
   },
   finishButton: {
-    backgroundColor: '#D93535',
+    backgroundColor: '#E56644',
   },
   buttonText: {
     color: '#fff',
