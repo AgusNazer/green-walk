@@ -58,7 +58,7 @@ export default function Record() {
 
       <ScrollView >
         {activities.map((activity, index) => (
-          <View key={index} className="flex flex-row justify-evenly mb-[1] bg-gray-800 py-2 w-full">
+          <View key={index} className="flex flex-row justify-evenly mb-[1] bg-zinc-900 py-2 w-full">
 
             <View className="flex flex-col justify-center items-center" >
               <Text style={styles.distanceText}>

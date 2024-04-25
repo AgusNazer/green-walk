@@ -1,6 +1,6 @@
 import { fontScale } from "nativewind";
 import React, { useState } from "react";
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView, Button } from "react-native";
 import CircularProgress from 'react-native-circular-progress-indicator';
 
 export default function Steps() {
@@ -64,16 +64,18 @@ export default function Steps() {
 
       <ScrollView style={{ flex: 1, width: '100%'}} className='mt-5'>
 
-        <View className='gap-4 px-3 py-4 bg-gray-800'>
+        <View className='gap-4 px-3 py-4 bg-zinc-900'>
 
           <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
             <Text className='text-2xl text-white'>
               <Text className='font-semibold'>1.000</Text> Steps challenge 
             </Text>
 
-            <Text className='text-xl text-white'>
-              Reward
-            </Text>
+            <Button
+              title="Claim"
+              color="#7EC200"
+              accessibilityLabel="Learn more about this purple button"
+            />
           </View>
 
           <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
@@ -81,9 +83,11 @@ export default function Steps() {
               <Text className='font-semibold'>3.000</Text> Steps challenge 
             </Text>
 
-            <Text className='text-xl text-white'>
-              Reward
-            </Text>
+            <Button
+              title="Claim"
+              color="#7EC200"
+              accessibilityLabel="Learn more about this purple button"
+            />
           </View>
 
           <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
