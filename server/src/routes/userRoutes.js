@@ -26,6 +26,8 @@ router.put('/profile/:id', userController.updateProfile);
 //get user
 router.get('/getAllUsers', userController.getAllUsers);
 
+router.get('/getEmail', userController.getUserByEmail);
+
 // info profile
 // router.get('/profile', userController.getProfile);
 

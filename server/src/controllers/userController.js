@@ -160,6 +160,25 @@ const userController = {
       console.error(error);
       res.status(500).json({ message: "Error updating user property" });
     }
+  },
+
+  async getUserByEmail(req, res) {
+    try {
+      const { email } = req.query; // Obtener el email de los parámetros de la consulta (query parameter)
+  
+      // Buscar el usuario por su correo electrónico
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Devolver el ID del usuario encontrado
+      res.status(200).json({ userId: user._id });
+    } catch (error) {
+      console.error("Error retrieving user by email:", error);
+      res.status(500).json({ message: "Error retrieving user by email" });
+    }
   }
 
 }

@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes.js');
-// const userActivity = require('./routes/userActivity.js')
+const userActivity = require('./routes/userActivity.js')
 // const updateProfile = require('./routes/userRoutes.js')
 // test de firebase jwt
 // require('./services/firebaseAdminConfig.js');
@@ -48,6 +48,7 @@ mongoose.connect(mongoDb)
 
   // Rutas
 app.use('/users', userRoutes);
+app.use('/activity', userActivity);
 
 
 

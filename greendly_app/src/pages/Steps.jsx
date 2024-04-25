@@ -8,7 +8,7 @@ export default function Steps() {
   const [value, setValue] = useState(0);
 
   return (
-    <View className='flex-1 items-center justify-start bg-[#fff] pt-10' >
+    <View className='flex-1 items-center justify-start bg-[#fff] pt-6' >
 
       <CircularProgress
         radius={150}
@@ -28,7 +28,7 @@ export default function Steps() {
         onAnimationComplete={() => setValue(50)}
       />
       
-      <View className='flex flex-row justify-evenly w-full mt-10' >
+      <View className='flex flex-row justify-evenly w-full mt-8 bg-gray-200 py-2' >
 
         <View className='' >
           <Text className='text-center text-2xl'>
@@ -52,7 +52,7 @@ export default function Steps() {
 
         <View className='' >
           <Text className='text-center text-2xl '>
-            01h:10m:45s
+            01h:10m
           </Text>
 
           <Text className='text-center text-xl'>
