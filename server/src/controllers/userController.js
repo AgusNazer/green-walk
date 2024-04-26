@@ -46,7 +46,7 @@ const userController = {
   async updateProfile(req, res) {
     try {
       const userId = req.params.id;
-      const { username, country, objective, carbonFootprint, photoUrl } = req.body;
+      const { username, country, objective, carbonFootprint, photoUrl, level } = req.body;
 
       const updatedUser = await User.findByIdAndUpdate(
         userId,
@@ -57,6 +57,7 @@ const userController = {
             objective,
             carbonFootprint,
             photoUrl,
+            level
           },
         },
         { new: true, runValidators: true }

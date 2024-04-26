@@ -49,6 +49,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  level: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   activities: [{
     date: Date,
     duration: Number,
