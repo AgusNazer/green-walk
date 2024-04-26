@@ -29,12 +29,28 @@ export default function Login({ navigation }) {
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: "994723718979-caq5o5d0jfmurcg9frhqd5itcrinr3vh.apps.googleusercontent.com",
     iosClientId: "994723718979-0ekbnlvd607s8itqe4bucfr4rc68d9k9.apps.googleusercontent.com",
-    webClientId: "994723718979-dfksqsdlcjcd9ud599deicvlque8mohm.apps.googleusercontent.com",
+    webClientId: "994723718979-4nsqsbko4a313npu11gonn51cd717gag.apps.googleusercontent.com",
   });
 
   useEffect(() => {
     handleEffect();
   }, [response, token]);
+
+  // Función para guardar el usuario en MongoDB
+  const saveUserInMongoDB = async (userData) => {
+    try { 
+      const response = await axios.post(`${API_URL}/users/register`, userData);
+      console.log('User saved in MongoDB:', response.data);
+      // agregue esto para el id de mongo
+      // if (response.data.userId) {
+      //   // Guardar el userId en el estado o en AsyncStorage para uso futuro
+      //   AsyncStorage.setItem('@mongoUserId', response.data.userId);
+      //   console.log('MongoDB User ID saved:', response.data.userId);
+      // }
+    } catch (error) {
+      console.error('Failed to save user in MongoDB', error);
+    }
+  };
 
   async function handleEffect() {
     const user = await getLocalUser();
@@ -65,14 +81,28 @@ export default function Login({ navigation }) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-        if (response !== null) {
-          // setToken(response.authentication.accessToken);
-          getUserInfo(response.authentication.accessToken);
-          // Aquí puedes agregar la navegación a la ruta deseada
-          navigation.navigate("BottomTab"); // Reemplaza "RUTA_DESEADA" con el nombre de la ruta a la que deseas navegar
-        }
-        setUserInfo(user);
-        console.log("loaded locally");
+
+      // console.log(`user id: ${uid}` );
+  
+
+
+      const user = await response.json();
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
+      navigation.navigate("BottomTab");
+      setUserInfo(user);
+
+      const request = await axios.get(`${api}/users/getAllUsers`)
+      const res = request.data
+      const username = user.email.split('@')[0];
+      const userData = {
+        email:user.email,
+        username
+      };
+      const foundUser = res.find(e => e.email === user.email);
+      if(!foundUser){
+        await axios.post(`${api}/users/register`, userData);
+      }
+
     } catch (error) {
       // Add your own error handler here
     }
@@ -118,21 +148,7 @@ export default function Login({ navigation }) {
     setShowSignUp(!showSignUp);
   };
 
-  // Función para guardar el usuario en MongoDB
-  const saveUserInMongoDB = async (userData) => {
-    try { 
-      const response = await axios.post(`${API_URL}/users/register`, userData);
-      console.log('User saved in MongoDB:', response.data);
-      // agregue esto para el id de mongo
-      // if (response.data.userId) {
-      //   // Guardar el userId en el estado o en AsyncStorage para uso futuro
-      //   AsyncStorage.setItem('@mongoUserId', response.data.userId);
-      //   console.log('MongoDB User ID saved:', response.data.userId);
-      // }
-    } catch (error) {
-      console.error('Failed to save user in MongoDB', error);
-    }
-  };
+
 
   const SignUp_LogIn = async () => {
     if (password !== confirmPassword) {
