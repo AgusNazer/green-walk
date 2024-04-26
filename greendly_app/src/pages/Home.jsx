@@ -85,10 +85,10 @@ export default function Home() {
       try {
         const response = await fetch(`${API_URL}/users/getMongoUserId/${emailStorage}`);
         const data = await response.json();
-        console.log(response.url);
+        // console.log(response.url);
         if (response.ok) {
           setUserId(data.userId);
-          console.log(data.userId);
+          // console.log(data.userId);
           if (data.userId) {
             await AsyncStorage.setItem('id', data.userId);
           } else {
@@ -234,8 +234,7 @@ export default function Home() {
           duration: elapsedTime,
         }),
       });
-      const data = await response.json();
-      console.log(data);
+      await response.json();
       // Reset totalDistance to 0 after successful request
       setTotalDistance(0);
     } catch (error) {
