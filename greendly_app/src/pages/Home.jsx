@@ -220,8 +220,7 @@ export default function Home() {
     setIsTimerRunning(false);
     clearInterval(timerId);
     setTimerId(null);
-    setElapsedTime(0)
-    
+    setElapsedTime(0)   
     try {
       const response = await fetch(`${API_URL}/activity/add`, {
         method: 'POST',
@@ -347,10 +346,10 @@ export default function Home() {
           </Text>
         </TouchableOpacity>
 
-        <View className="flex flex-row justify-evenly mb-4" >
+        <View className="flex flex-row justify-evenly mb-3" >
           <View className="flex flex-col justify-center items-center" >
             <Text style={styles.distanceText}>
-              {(totalDistance / 1000).toFixed(3) + ' Km'}
+              {(totalDistance / 1000).toFixed(2) + ' Km'}
             </Text>
 
             <Text className="text-xl">
@@ -371,11 +370,13 @@ export default function Home() {
 
       {!isRecording && (
         <View className='flex-1'>
+          <Text className='text-center text-3xl text-white font-semibold mb-[1] bg-zinc-900 py-2'>
+            Recent activities
+          </Text>
+
           <Record />
         </View>
       )}
-
-
 
       </View>
     </>
@@ -391,9 +392,10 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: 'center',
     backgroundColor: '#007bff',
-    padding: 15,
+    padding: 10,
     borderRadius: 5,
-    marginVertical: 10,
+    marginTop: 15,
+    marginBottom: 10,
     width: '50%'
   },
   startButton: {
@@ -404,11 +406,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 25,
     fontWeight: '500',
     textAlign: 'center',
     textTransform: 'uppercase',
-    letterSpacing: 1.5,    
+    letterSpacing: 9,    
   },
   map: {
     flex: 1,
