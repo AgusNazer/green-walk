@@ -50,7 +50,7 @@ export default function Steps() {
 
   const longitudPaso = 0.75; // Longitud aprox de cada paso en metros
   const cantidadPasos = Math.floor(totalDistance / longitudPaso);
-  // const cantidadPasos = 299
+  // const cantidadPasos = 9999
 
   const challenge1 = 100
   const challenge2 = 300
@@ -73,17 +73,20 @@ export default function Steps() {
     } else if (cantidadPasos < challenge3) {
       nuevoPorcentaje = (cantidadPasos / challenge3) * 100;
       nuevoTitle = 500;
-    } else if (cantidadPasos <= challenge4) {
-      nuevoPorcentaje = (cantidadPasos / challenge4) * 100;
+    } else if (cantidadPasos < challenge4) {
+      nuevoPorcentaje = (cantidadPasos / challenge4) * 100 - 1;
       nuevoTitle = 1000;
-    } else if (cantidadPasos <= challenge5) {
-      nuevoPorcentaje = (cantidadPasos / challenge5) * 100;
+    } else if (cantidadPasos < challenge5) {
+      nuevoPorcentaje = (cantidadPasos / challenge5) * 100 - 1;
       nuevoTitle = 3000;
-    } else if (cantidadPasos <= challenge6) {
-      nuevoPorcentaje = (cantidadPasos / challenge6) * 100;
+    } else if (cantidadPasos < challenge6) {
+      nuevoPorcentaje = (cantidadPasos / challenge6) * 100 - 1;
       nuevoTitle = 5000;
-    } else if (cantidadPasos <= challenge7) {
-      nuevoPorcentaje = (cantidadPasos / challenge7) * 100;
+    } else if (cantidadPasos < challenge7) {
+      nuevoPorcentaje = (cantidadPasos / challenge7) * 100 - 1;
+      nuevoTitle = 10000;
+    } else if (cantidadPasos == challenge7) {
+      nuevoPorcentaje = 100;
       nuevoTitle = 10000;
     }
 
@@ -102,14 +105,14 @@ export default function Steps() {
             <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#8AD400']} // Colores de carga
-            progressBackgroundColor="#fff" // Fondo de carga
+            colors={['#8AD400']}
+            progressBackgroundColor="#fff"
             />
           }
           >
           <CircularProgress
             radius={150}
-            value={porcentaje - 2}
+            value={porcentaje}
             valueSuffix={'%'}
             progressValueFontSize={60}
             progressValueColor="#8AD400"
