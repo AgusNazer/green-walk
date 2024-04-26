@@ -6,13 +6,6 @@ const userActivityController = {
   addActivity: async (req, res) => {
     try {
         const { userId, date, distance, duration, tokensEarned } = req.body;
-
-        // Verifica que los campos requeridos estén presentes
-        // if (!userId || !distance || !duration || !tokensEarned) {
-        //     return res.status(400).json({ message: "Campos requeridos faltantes" });
-        // }
-
-        // Crea la nueva actividad
         const newActivity = new Activity({
             userId: new mongoose.Types.ObjectId(userId),
             date: new Date(date).toLocaleString(), // Formatea la fecha y hora
@@ -20,17 +13,12 @@ const userActivityController = {
             duration,
             tokensEarned,
         });
-
-        // Guarda la nueva actividad
         const savedActivity = await newActivity.save();
-
-        // Actualiza el usuario con la nueva actividad
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             { $push: { activities: { date, distance, duration } } },
             { new: true }
         );
-
         res.status(201).json({ activity: savedActivity });
     } catch (error) {
         console.error(error);
@@ -49,6 +37,39 @@ const userActivityController = {
     }
   },
 
+
+  getUserActivities: async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userActivities = await Activity.find({ userId });
+        const filteredActivities = userActivities.map(activity => ({
+            distance: activity.distance,
+            duration: activity.duration,
+            date: activity.date
+        }));
+        res.status(200).json(filteredActivities);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Algo salió mal", error: error.message });
+    }
+  },
+  
+
+  getLastActivities: async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userActivities = await Activity.find({ userId }).sort({ createdAt: -1 }).limit(10);
+        const filteredActivities = userActivities.map(activity => ({
+            distance: activity.distance,
+            duration: activity.duration,
+            date: activity.date
+        }));
+        res.status(200).json(filteredActivities);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Algo salió mal", error: error.message });
+    }
+  },
   
 };
 

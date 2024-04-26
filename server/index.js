@@ -19,18 +19,20 @@ const os = require('os');
 
 const port = process.env.PORT || 3001;
 
-function getLocalIpAddress() { // funcion para traer la IpV4 del equipo local
+function getLocalIpAddress() {
   const interfaces = os.networkInterfaces();
-  for (const interfaceName in interfaces) {
-    const iface = interfaces[interfaceName];
-    for (let i = 0; i < iface.length; i++) {
-      const { address, family, internal } = iface[i];
-      if (family === 'IPv4' && !internal) {
-        return address;
-      }
+  // Priorizar direcciones IPv4 sobre IPv6
+  const sortedInterfaces = Object.values(interfaces)
+    .flat()
+    .sort((a, b) => (a.family === 'IPv4' ? -1 : 1));
+
+  for (const iface of sortedInterfaces) {
+    const { address, family, internal } = iface;
+    if (family === 'IPv4' && !internal) {
+      return address;
     }
   }
-  return 'localhost'; // Si no se encuentra ninguna IP, devuelve 'localhost'
+  return 'localhost';
 }
 
 const ipAddress = getLocalIpAddress();
