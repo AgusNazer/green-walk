@@ -16,12 +16,14 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
 import { Auth, getAuth } from "firebase/auth";
 import { API_URL } from "@env";
-// import * as ImagePicker from "expo-image-picker;"
+import * as ImagePicker from "expo-image-picker";
 import RNPickerSelect from "react-native-picker-select";
 // import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 // import CountryFlag from "react-native-country-flag";
 import CountryPicker from "react-native-country-picker-modal";
 import { StatusBar } from "expo-status-bar";
+import { ActivityIndicator } from "react-native";
+import storage from '@react-native-firebase/storage';
 
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({
@@ -32,18 +34,20 @@ export default function UserProfile() {
     carbonFootprint: "Carbon footsprint",
     photoUrl: "https://via.placeholder.com/150",
   });
+  const [loading, setLoading] = useState(false);
 
   const [userId, setUserId] = useState(null);
   const [userEmail, setUserEmail] = useState("");
   const [editableField, setEditableField] = useState("");
   const auth = getAuth();
 
-  // Define countryFlags
-  // const countryFlags = {
-  //   Argentina: "flag-ar",
-  //   Brasil: "flag-br",
-  //   Chile: "flag-cl",
-  // };
+// Solicitar permisos de cámara y galería
+async function requestMediaLibraryPermissions() {
+  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (status !== 'granted') {
+    Alert.alert('Sorry, we need camera roll permissions to make this work!');
+  }
+}
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -61,9 +65,54 @@ export default function UserProfile() {
         }
       }
     };
+    async function requestMediaLibraryPermissions() {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+
+    requestMediaLibraryPermissions();
     loadUserData();
   }, []);
+ 
+  // Subir imagen de perfil
 
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const ref = storage().ref('uploads').child(`profile_${userId}`);
+  
+    return ref.put(blob);
+  };
+
+  const pickImage = async () => {
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  if (!result.cancelled) {
+    setLoading(true);
+    uploadImage(result.uri)
+      .then(() => {
+        return storage().ref('uploads').child(`profile_${userId}`).getDownloadURL();
+      })
+      .then((downloadURL) => {
+        setUserInfo({...userInfo, photoUrl: downloadURL});
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error uploading image: ", error);
+        Alert.alert('Error uploading image!');
+        setLoading(false);
+      });
+  }
+};
+
+ // Actualizar
   const handleUpdateProfile = async () => {
     if (!userId) {
       Alert.alert("Error", "No se pudo identificar al usuario");
@@ -120,13 +169,13 @@ export default function UserProfile() {
             <View
               style={{ backgroundColor: "#fff", borderRadius: 10, padding: 5 }}
             >
-              <TouchableOpacity onPress={() => setEditableField("2")}>
+              <TouchableOpacity onPress={pickImage}>
                 <Icon name="edit" size={20} color="#4B5563" />
               </TouchableOpacity>
             </View>
           </View>
         </View>
-        <Text style={{ fontSize: 20, fontWeight: "", marginTop: 8 }}>
+        <Text style={{ fontSize: 20, marginTop: 8 }}>
           {" "}
           Username:
           {userEmail}
@@ -174,38 +223,26 @@ export default function UserProfile() {
         </TouchableOpacity>
       </View>
       <TextInput
-        className="mt-2 p-2 border border-gray-300 rounded"
-        onChangeText={(text) =>
-          setUserInfo({ ...userInfo, tokensEarned: text })
-        }
-        value={
-          editableField === "tokensEarned"
-            ? userInfo.tokensEarned
-            : userInfo.tokensEarned
-        }
-        placeholder="Earned Tokens"
-        editable={editableField === "Earned Tokens"}
-      />
+  className="mt-2 p-2 border border-gray-300 rounded"
+  onChangeText={(text) => setUserInfo({ ...userInfo, tokensEarned: parseInt(text) })}
+  value={userInfo.tokensEarned.toString()}
+  placeholder="Earned Tokens"
+  editable={editableField === "tokensEarned"}
+/>
 
-      <View style={{ flexDirection: "row", alignItems: "center" }} className='m-2'>
-        <Text style={{ marginRight: 10 }}>Carbon footsprint (CO2):</Text>
-        <TouchableOpacity onPress={() => setEditableField("carbonFootprint")}>
-          <Icon name="edit" size={20} color="#4B5563" />
-        </TouchableOpacity>
-      </View>
-      <TextInput
-        className="mt-2 mb-8 p-2 border border-gray-300 rounded"
-        onChangeText={(text) =>
-          setUserInfo({ ...userInfo, carbonFootprint: text })
-        }
-        value={
-          editableField === "carbonFootprint"
-            ? userInfo.carbonFootprint
-            : userInfo.carbonFootprint
-        }
-        placeholder="Carbon footsprint"
-        editable={editableField === "carbonFootprint"}
-      />
+<View style={{ flexDirection: "row", alignItems: "center" }} className='m-2'>
+  <Text style={{ marginRight: 10 }}>Carbon Footprint (CO2):</Text>
+  <TouchableOpacity onPress={() => setEditableField("carbonFootprint")}>
+    <Icon name="edit" size={20} color="#4B5563" />
+  </TouchableOpacity>
+</View>
+<TextInput
+  className="mt-2 mb-8 p-2 border border-gray-300 rounded"
+  onChangeText={(text) => setUserInfo({ ...userInfo, carbonFootprint: parseFloat(text) })}
+  value={userInfo.carbonFootprint.toString()}
+  placeholder="Carbon Footprint"
+  editable={editableField === "carbonFootprint"}
+/>
 
       <Button
         title="Actualizar Perfil"
