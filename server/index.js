@@ -37,6 +37,10 @@ function getLocalIpAddress() {
 
 const ipAddress = getLocalIpAddress();
 
-app.listen(port, ipAddress, () => {
-  console.log(`Servidor Express escuchando en ${ipAddress}, ${port}`);
+// app.listen(port, ipAddress, () => {
+//   console.log(`Servidor Express escuchando en ${ipAddress}, ${port}`);
+// });
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Servidor Express escuchando en el puerto ${port}`);
 });
