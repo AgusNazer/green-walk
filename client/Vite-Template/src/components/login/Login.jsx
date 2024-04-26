@@ -63,7 +63,13 @@ export default function Login() {
           email: user.email,
         };
         localStorage.setItem('userEmail', user.email);
-        await axios.post(`${api}/users/register`, userData);
+
+        const request = await axios.get(`${api}/users/getAllUsers`)
+        const response = request.data
+        const foundUser = response.find(e => e.email === user.email);
+        if(!foundUser){
+          await axios.post(`${api}/users/register`, userData);
+        }
         console.log("Token ID:", token);
         console.log("Success login");
         navigate('/dashboard');

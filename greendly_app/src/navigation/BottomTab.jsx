@@ -130,8 +130,8 @@ export default function BottomTab() {
             fontSize: 12,
             fontWeight: "bold",          
           },
-          tabBarBadge: 3,
-          tabBarBadgeStyle: { backgroundColor: "green"},
+          tabBarBadge: 2,
+          tabBarBadgeStyle: { backgroundColor: "#7DC000"},
           tabBarStyle: { backgroundColor: "#eeeeee" },
         }}
       />

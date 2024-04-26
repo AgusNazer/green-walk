@@ -1,6 +1,6 @@
 import { fontScale } from "nativewind";
 import React, { useState } from "react";
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView, Button } from "react-native";
 import CircularProgress from 'react-native-circular-progress-indicator';
 
 export default function Steps() {
@@ -20,18 +20,18 @@ export default function Steps() {
         titleFontSize={30}
         titleColor="#81C600"
         inActiveStrokeColor={'#70D07C'}
-        activeStrokeColor={'#97E700'}
-        activeStrokeWidth={20}
+        activeStrokeColor={'#89D200'}
+        activeStrokeWidth={29}
         inActiveStrokeOpacity={0.2}
         inActiveStrokeWidth={25}
         duration={3000}
         onAnimationComplete={() => setValue(50)}
       />
       
-      <View className='flex flex-row justify-evenly w-full mt-8 bg-gray-200 py-2' >
+      <View className='flex flex-row justify-evenly w-full mt-8  py-3' >
 
         <View className='' >
-          <Text className='text-center text-2xl'>
+          <Text className='text-center text-3xl font-semibold'>
             5,5 Km
           </Text>
 
@@ -41,7 +41,7 @@ export default function Steps() {
         </View>
 
         <View className='' >
-          <Text className='text-center text-2xl'>
+          <Text className='text-center text-3xl font-semibold'>
             7.268
           </Text>
 
@@ -51,7 +51,7 @@ export default function Steps() {
         </View>
 
         <View className='' >
-          <Text className='text-center text-2xl '>
+          <Text className='text-center text-3xl font-semibold'>
             01h:10m
           </Text>
 
@@ -62,84 +62,85 @@ export default function Steps() {
 
       </View>
 
-      <ScrollView style={{ flex: 1, width: '100%'}} className='mt-7'>
-        <View className=''>
+      <ScrollView style={{ flex: 1, width: '100%'}} className='mt-5'>
 
-          <View className='gap-4'>
+        <View className='gap-4 px-3 py-4 bg-zinc-900'>
 
-            <View className='flex flex-row justify-between bg-gray-100 py-2 px-2'>
-              <Text className='text-xl'>
-              1.000 Steps Challenge
-              </Text>
+          <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
+            <Text className='text-2xl text-white'>
+              <Text className='font-semibold'>1.000</Text> Steps challenge 
+            </Text>
 
-              <Text className='text-xl '>
-                Reward
-              </Text>
-            </View>
-
-            <View className='flex flex-row justify-between bg-gray-100 py-2 px-2'>
-              <Text className='text-xl'>
-              3.000 Steps Challenge
-              </Text>
-
-              <Text className='text-xl '>
-                Reward
-              </Text>
-            </View>
-
-            <View className='flex flex-row justify-between bg-gray-100 py-2 px-2'>
-              <Text className='text-xl'>
-              10.000 Steps Challenge
-              </Text>
-
-              <Text className='text-xl '>
-                
-              </Text>
-            </View>
-
-            <View className='flex flex-row justify-between bg-gray-100 py-2 px-2'>
-              <Text className='text-xl'>
-              30.000 Steps Challenge
-              </Text>
-
-              <Text className='text-xl '>
-                
-              </Text>
-            </View>
-
-            <View className='flex flex-row justify-between bg-gray-100 py-2 px-2'>
-              <Text className='text-xl'>
-              50.000 Steps Challenge
-              </Text>
-
-              <Text className='text-xl '>
-                
-              </Text>
-            </View>
-
-            <View className='flex flex-row justify-between bg-gray-100 py-2 px-2'>
-              <Text className='text-xl'>
-              70.000 Steps Challenge
-              </Text>
-
-              <Text className='text-xl '>
-                
-              </Text>
-            </View>
-
-            <View className='flex flex-row justify-between bg-gray-100 py-2 px-2'>
-              <Text className='text-xl'>
-              100.000 Steps Challenge
-              </Text>
-
-              <Text className='text-xl '>
-                
-              </Text>
-            </View>          
-
+            <Button
+              title="Claim"
+              color="#7EC200"
+              accessibilityLabel="Learn more about this purple button"
+            />
           </View>
-          
-        </View> 
+
+          <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
+            <Text className='text-2xl text-white'>
+              <Text className='font-semibold'>3.000</Text> Steps challenge 
+            </Text>
+
+            <Button
+              title="Claim"
+              color="#7EC200"
+              accessibilityLabel="Learn more about this purple button"
+            />
+          </View>
+
+          <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
+            <Text className='text-2xl text-white'>
+              <Text className='font-semibold'>10.000</Text> Steps challenge 
+            </Text>
+
+            <Text className='text-xl text-white'>
+              
+            </Text>
+          </View>
+
+          <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
+            <Text className='text-2xl text-white'>
+              <Text className='font-semibold'>30.000</Text> Steps challenge 
+            </Text>
+
+            <Text className='text-xl text-white'>
+              
+            </Text>
+          </View>
+
+          <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
+            <Text className='text-2xl text-white'>
+              <Text className='font-semibold'>50.000</Text> Steps challenge 
+            </Text>
+
+            <Text className='text-xl text-white'>
+              
+            </Text>
+          </View>
+
+          <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
+            <Text className='text-2xl text-white'>
+              <Text className='font-semibold'>70.000</Text> Steps challenge 
+            </Text>
+
+            <Text className='text-xl text-white'>
+              
+            </Text>
+          </View>
+
+          <View className='flex flex-row justify-between border border-white rounded-xl p-3'>
+            <Text className='text-2xl text-white'>
+              <Text className='font-semibold'>100.000</Text> Steps challenge 
+            </Text>
+
+            <Text className='text-xl '>
+              
+            </Text>
+          </View>          
+
+        </View>
       </ScrollView>
 
 

@@ -10,6 +10,8 @@ import CustomText from '../components/CustomText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAuth } from "firebase/auth";
 import appfirebase from "../../firebase";
+import { API_URL } from '@env';
+import Record from '../components/Record';
 
 const { themeDark, themeLight } = themes;
 
@@ -35,7 +37,7 @@ const formatTime = (milliseconds) => {
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  return `${hours.toString().padStart(2, '')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
 
 export default function Home() {
@@ -81,12 +83,12 @@ export default function Home() {
   useEffect(() => {
     const fetchUserIdByEmail = async () => {
       try {
-        const response = await fetch(`http://192.168.0.26:3002/users/getEmail?email=${emailStorage}`);
+        const response = await fetch(`${API_URL}/users/getMongoUserId/${emailStorage}`);
         const data = await response.json();
-        console.log(response.url)
+        console.log(response.url);
         if (response.ok) {
           setUserId(data.userId);
-          console.log(data.userId)
+          console.log(data.userId);
           if (data.userId) {
             await AsyncStorage.setItem('id', data.userId);
           } else {
@@ -105,7 +107,7 @@ export default function Home() {
     }, 1000);
   
     return () => clearTimeout(timeoutId);
-  }, [emailStorage]); 
+  }, [emailStorage]);
 
   useEffect(() => {
     const backAction = () => {
@@ -158,15 +160,15 @@ export default function Home() {
     for (let i = 1; i < locations.length; i++) {
       const prevLocation = locations[i - 1];
       const currentLocation = locations[i];
-      const distance = calculateDistance(
+      let distance = calculateDistance(
         prevLocation.latitude,
         prevLocation.longitude,
         currentLocation.latitude,
         currentLocation.longitude
       );
-      if (isRecording && distance >= 1) {
+      if (isRecording && distance >= 0) {
         calculatedDistance += distance;
-      }
+      }      
     }
     return calculatedDistance;
   };
@@ -176,14 +178,13 @@ export default function Home() {
       const distance = calculateTotalDistance();
       setTotalDistance(distance);
     }
-  }, [locations]);
+  }, [locations, isRecording]);
 
   const customMapStyle = dark ? themeDark : themeLight;
 
   const toggleInputs = () => {
     setIamReady(!iamReady);
   };
-
 
   const handleStartRecording = async () => {
     try {
@@ -219,9 +220,10 @@ export default function Home() {
     setIsTimerRunning(false);
     clearInterval(timerId);
     setTimerId(null);
+    setElapsedTime(0)
     
     try {
-      const response = await fetch('http://192.168.0.26:3002/activity/add', {
+      const response = await fetch(`${API_URL}/activity/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -240,6 +242,7 @@ export default function Home() {
     } catch (error) {
       console.error('Error al enviar la solicitud:', error);
     }
+    setLocations([]);
   };
 
   useEffect(() => {
@@ -255,13 +258,7 @@ export default function Home() {
     }
 
     return () => clearInterval(intervalId);
-  }, [isTimerRunning, startTime]);
-  
-
-
-  
-
-  
+  }, [isTimerRunning, startTime]);  
 
   return (
     <>
@@ -303,7 +300,7 @@ export default function Home() {
                 }}
                 title="Inicio"
                 description="Inicio del recorrido"
-                pinColor="#1D57CB"
+                pinColor="#7BC239"
               />
               {locations.length > 1 && (
                 <Marker
@@ -313,7 +310,7 @@ export default function Home() {
                   }}
                   title="Fin"
                   description="Fin del recorrido"
-                  pinColor="red"
+                  pinColor="#E56644"
                 />
               )}
             </>
@@ -353,10 +350,10 @@ export default function Home() {
         <View className="flex flex-row justify-evenly mb-4" >
           <View className="flex flex-col justify-center items-center" >
             <Text style={styles.distanceText}>
-              {(totalDistance / 1000).toFixed(2) + ' Km'}
+              {(totalDistance / 1000).toFixed(3) + ' Km'}
             </Text>
 
-            <Text className="">
+            <Text className="text-xl">
               Distance
             </Text>
           </View>
@@ -366,36 +363,17 @@ export default function Home() {
               {formatTime(elapsedTime)}
             </Text>
 
-            <Text className="" >
+            <Text className="text-xl" >
               Time
             </Text>
           </View>
         </View>
 
-
-        <View>
-          <View className="flex flex-row justify-evenly mb-4" >
-            <View className="flex flex-col justify-center items-center" >
-              <Text style={styles.distanceText}>
-                {(totalDistance / 1000).toFixed(2) + ' Km'}
-              </Text>
-
-              <Text className="">
-                Distance
-              </Text>
-            </View>
-
-            <View className="flex flex-col justify-center items-center">
-              <Text style={styles.timeText}>
-                {formatTime(elapsedTime)}
-              </Text>
-
-              <Text className="" >
-                Time
-              </Text>
-            </View>
-          </View>
+      {!isRecording && (
+        <View className='flex-1'>
+          <Record />
         </View>
+      )}
 
 
 
@@ -419,10 +397,10 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   startButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#7BC239',
   },
   finishButton: {
-    backgroundColor: '#D93535',
+    backgroundColor: '#E56644',
   },
   buttonText: {
     color: '#fff',
@@ -439,13 +417,13 @@ const styles = StyleSheet.create({
   },
   distanceText:{
     color: 'black',
-    fontSize: 20,
+    fontSize: 27,
     fontWeight: '500',
     textAlign: 'center',
   },
   timeText:{
     color: 'black',
-    fontSize: 20,
+    fontSize: 27,
     fontWeight: '500',
     textAlign: 'center',
   },
