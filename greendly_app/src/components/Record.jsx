@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, ScrollView, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_URL } from '@env';
+import { EXPO_PUBLIC_API_URL } from '@env';
 import { RefreshControl } from 'react-native';
 
 export default function Record() {
@@ -35,7 +35,7 @@ export default function Record() {
   const fetchData = async () => {
     try {
       const userId = await AsyncStorage.getItem('id');
-      const response = await fetch(`${API_URL}/activity/last/${userId}`);
+      const response = await fetch(`${EXPO_PUBLIC_API_URL}/activity/last/${userId}`);
       if (!response.ok) {
         throw new Error('Error al obtener actividades del usuario');
       }

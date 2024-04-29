@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios'
-import { API_URL } from '@env';
+import { EXPO_PUBLIC_API_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -27,13 +27,13 @@ useEffect(() => {
 
 const handleGetRequest = async () => {
   try {
-    const request = await axios.get(`${API_URL}/users/getAllUsers`)
+    const request = await axios.get(`${EXPO_PUBLIC_API_URL}/users/getAllUsers`)
     const response = request.data
     const foundUser = response.find(user => user.email === emailStorage);
     if (foundUser.wallet !== null) {
       console.log(foundUser.wallet);
       try {
-        const response = await axios.post(`${API_URL}/claim`,{
+        const response = await axios.post(`${EXPO_PUBLIC_API_URL}/claim`,{
           "addresLocal": foundUser.wallet,
            "id": "1",
            "name": "Nicolas",

@@ -10,7 +10,7 @@ import CustomText from '../components/CustomText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAuth } from "firebase/auth";
 import appfirebase from "../../firebase";
-import { API_URL } from '@env';
+import { EXPO_PUBLIC_API_URL } from '@env';
 import Record from '../components/Record';
 
 const { themeDark, themeLight } = themes;
@@ -83,7 +83,7 @@ export default function Home() {
   useEffect(() => {
     const fetchUserIdByEmail = async () => {
       try {
-        const response = await fetch(`${API_URL}/users/getMongoUserId/${emailStorage}`);
+        const response = await fetch(`${EXPO_PUBLIC_API_URL}/users/getMongoUserId/${emailStorage}`);
         const data = await response.json();
         console.log(response.url);
         if (response.ok) {
@@ -222,7 +222,7 @@ export default function Home() {
     setTimerId(null);
     setElapsedTime(0)   
     try {
-      const response = await fetch(`${API_URL}/activity/add`, {
+      const response = await fetch(`${EXPO_PUBLIC_API_URL}/activity/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

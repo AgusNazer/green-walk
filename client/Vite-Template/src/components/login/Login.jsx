@@ -36,6 +36,7 @@ export default function Login() {
         navigate('/dashboard');
       } else {
         await doSignInWithEmailAndPassword(email, password);
+        localStorage.setItem('userEmail',email);
         setSuccessMessage("Inicio de sesión exitoso. Bienvenido/a de nuevo.");
         navigate('/dashboard');
       }
