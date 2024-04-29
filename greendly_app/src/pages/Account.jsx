@@ -198,9 +198,7 @@ export default function UserProfile() {
             </View>
           </View>
           <CustomText style={{ fontSize: 20, marginTop: 8 }}>
-            {" "}
-            Username
-            {userEmail}
+            Username: {userEmail}
           </CustomText>
           {/* Banderas */}
           <View style={{ alignItems: "center" }} className="m-2">
