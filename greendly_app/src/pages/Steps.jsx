@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, Button } from "react-native";
 import CircularProgress from 'react-native-circular-progress-indicator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_URL } from '@env';
+import { EXPO_PUBLIC_API_URL } from '@env';
 import { RefreshControl } from 'react-native';
 
 export default function Steps() {
@@ -31,7 +31,7 @@ export default function Steps() {
   const fetchData = async () => {
     try {
       const userId = await AsyncStorage.getItem('id');
-      const response = await fetch(`${API_URL}/activity/user/${userId}`);
+      const response = await fetch(`${EXPO_PUBLIC_API_URL}/activity/user/${userId}`);
       if (!response.ok) {
         throw new Error('Error al obtener actividades del usuario');
       }
