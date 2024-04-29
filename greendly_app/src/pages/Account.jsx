@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
 import { Auth, getAuth } from "firebase/auth";
-import { API_URL } from "@env";
+import { EXPO_PUBLIC_API_URL } from "@env";
 import * as ImagePicker from "expo-image-picker";
 import RNPickerSelect from "react-native-picker-select";
 // import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
@@ -60,7 +60,7 @@ export default function UserProfile() {
       const mongoUserId = await AsyncStorage.getItem("@mongoUserId");
       if (mongoUserId) {
         setUserId(mongoUserId);
-        const response = await axios.get(`${API_URL}/users/${mongoUserId}`);
+        const response = await axios.get(`${EXPO_PUBLIC_API_URL}/users/${mongoUserId}`);
         if (response.data) {
           setUserInfo((current) => ({ ...current, ...response.data }));
           setUserEmail(response.data.email.split("@")[0]);

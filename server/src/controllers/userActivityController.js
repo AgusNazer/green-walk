@@ -38,9 +38,9 @@ const userActivityController = {
   },
 
 
-  getAllActivities: async (req, res) => {
+  getUserActivities: async (req, res) => {
     try {
-        const { userId } = req.query;
+        const { userId } = req.params;
         const userActivities = await Activity.find({ userId });
         const filteredActivities = userActivities.map(activity => ({
             distance: activity.distance,
@@ -52,8 +52,24 @@ const userActivityController = {
         console.error(error);
         res.status(500).json({ message: "Algo salió mal", error: error.message });
     }
-},
+  },
+  
 
+  getLastActivities: async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userActivities = await Activity.find({ userId }).sort({ createdAt: -1 }).limit(10);
+        const filteredActivities = userActivities.map(activity => ({
+            distance: activity.distance,
+            duration: activity.duration,
+            date: activity.date
+        }));
+        res.status(200).json(filteredActivities);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Algo salió mal", error: error.message });
+    }
+  },
   
 };
 
