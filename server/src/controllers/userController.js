@@ -190,7 +190,7 @@ async  getMongoUserIdByEmail(req, res) {
     // Normaliza el email para evitar problemas de case sensitivity
     const email = req.params.email.toLowerCase();
     const user = await User.findOne({ email: email });
-    console.log(user);
+    // console.log(user);
     if (user) {
         // Si se encuentra el usuario, devolver el ID de MongoDB
         res.status(200).json({ userId: user._id.toString() });
