@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, BackHandler, ToastAndroid, Image } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, BackHandler, ToastAndroid, Image, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline  } from 'react-native-maps';
@@ -262,8 +262,24 @@ export default function Home() {
     <>
       {!iamReady && (    
         <CardsHome toggleInputs={toggleInputs} />    
-      )}     
-   
+      )}
+
+      {!isRecording && (
+        <View className=''>
+          <Button
+            style={{
+              fontSize: 35,
+            }}
+            classNames=''
+            onPress={toggleInputs}
+            title="Close map"
+            color="#5D085D"
+            accessibilityLabel="Learn more about this purple button"
+          />
+        </View>
+      )} 
+
+
       <View style={styles.container}>
 
         {locationLoaded && location ? (
