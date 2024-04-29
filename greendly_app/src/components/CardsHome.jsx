@@ -87,7 +87,7 @@ export default function CardsHome(props) {
         </View>
 
 
-        <View className="relative h-64 mt-2 mx-2 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500 shadow-blue-gray-500/40">
+        {/* <View className="relative h-64 mt-2 mx-2 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500 shadow-blue-gray-500/40">
           <Image
             source={{ uri: 'https://www.webconsultas.com/sites/default/files/styles/wc_adaptive_noticia__medium__webp/public/media/2022/11/10/caminar_deprisa_jpg.webp' }}
             className="w-full h-full"
@@ -110,7 +110,7 @@ export default function CardsHome(props) {
           <CustomText className='absolute top-[73%] left-3 text-white text-xl bg-[#00000090] px-4 rounded-xl text-left w-[74%]'>
             Are you ready to start walking and earning tokens?
           </CustomText>
-        </View>
+        </View> */}
 
       </ScrollView>
     </View>
