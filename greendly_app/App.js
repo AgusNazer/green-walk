@@ -15,7 +15,8 @@ const fetchFonts = () => {
   return Font.loadAsync({
     // 'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
     // 'Roboto-Light': require('./assets/fonts/Roboto-Light.ttf'),
-    'jersey-25': require('./assets/fonts/Jersey25-Regular.ttf'),
+    // 'jersey-25': require('./assets/fonts/Jersey25-Regular.ttf'),
+    'Montserrat-VariableFont_wght': require('./assets/fonts/Montserrat-VariableFont_wght.ttf'),
   });
 };
 
