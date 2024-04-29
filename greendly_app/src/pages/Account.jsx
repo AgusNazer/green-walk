@@ -29,12 +29,12 @@ import CustomText from "../components/CustomText";
 export default function UserProfile() {
   const [userInfo, setUserInfo] = useState({
     name: "",
-    country: "Argentina",
-    objective: "Reducir la huella de carbono en un 15% este año",
-    tokensEarned: "1500",
-    carbonFootprint: "Carbon footsprint",
-    photoUrl: "https://via.placeholder.com/150",
-    level: "5",
+    country: "",
+    objective: "",
+    tokensEarned: "",
+    carbonFootprint: "",
+    photoUrl: "",
+    level: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -158,7 +158,7 @@ export default function UserProfile() {
   return (
     <ImageBackground
       source={{
-        uri: "https://img.freepik.com/free-vector/colorful-abstract-background_53876-93088.jpg?size=338&ext=jpg&ga=GA1.1.553209589.1714089600&semt=ais",
+        uri: "https://img.freepik.com/vector-gratis/hermoso-fondo-decorativo-textura-acuarela-colores-suaves_1055-14290.jpg?size=626&ext=jpg&ga=GA1.1.1488620777.1712016000&semt=ais",
       }}
       style={{ flex: 1 }}
       resizeMode="cover"
@@ -173,6 +173,8 @@ export default function UserProfile() {
               borderRadius: 64,
               overflow: "hidden",
               backgroundColor: "#eee",
+              borderWidth: 3, // Grosor del borde
+              borderColor: '#4B5563',
             }}
           >
             <Image
@@ -191,13 +193,13 @@ export default function UserProfile() {
               }}
             >
               <TouchableOpacity onPress={pickImage}>
-                <Icon name="edit" size={20} color="#4B5563" />
+                <Icon name="camera" size={20} color="#4B5563" /> 
               </TouchableOpacity>
             </View>
           </View>
           <CustomText style={{ fontSize: 20, marginTop: 8 }}>
             {" "}
-            Username:
+            Username
             {userEmail}
           </CustomText>
           {/* Banderas */}
@@ -223,7 +225,7 @@ export default function UserProfile() {
             style={{ fontSize: 20, marginRight: 10 }}
             className="mt-4"
           >
-            Objective:
+            Objective
           </CustomText>
           <TouchableOpacity onPress={() => setEditableField("objective")}>
             <Icon name="edit" size={20} color="#4B5563" />
@@ -246,7 +248,7 @@ export default function UserProfile() {
           className="m-2"
         >
           <CustomText style={{ fontSize: 20, marginRight: 10 }}>
-            Earned Tokens:
+            Earned Tokens
           </CustomText>
           <TouchableOpacity onPress={() => setEditableField("tokensEarned")}>
             <Icon name="edit" size={20} color="#4B5563" />
@@ -267,7 +269,7 @@ export default function UserProfile() {
           className="m-2"
         >
           <CustomText style={{ fontSize: 20, marginRight: 10 }}>
-            Carbon Footprint (CO2):
+            Carbon Footprint (CO2)
           </CustomText>
           <TouchableOpacity onPress={() => setEditableField("carbonFootprint")}>
             <Icon name="edit" size={20} color="#4B5563" />
@@ -349,4 +351,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  
 });
